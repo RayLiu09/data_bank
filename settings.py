@@ -1,0 +1,99 @@
+#
+# FastApi系统配置文件
+# 运行前：请修改此配置文件cli方式启动
+#
+from pydantic_settings import BaseSettings
+
+
+class APISettings(BaseSettings):
+    # 系统名称
+    project_name: str = "数据银行平台"
+    # API版本号
+    api_version: str = "v1"
+    # 语言
+    locale: str = "zh"
+    # 服务器配置
+    server_host: str = "0.0.0.0"
+    server_port: int = 8000
+    # Host配置
+    trusted_hosts: list[str] = ["*"]
+    # Mysql配置
+    database_url: str = "mysql+pymysql:/user:pass@192.168.1.182:3306/data_bank?charset=utf8mb4&autocommit=true"
+    # Minio本地存储配置
+    minio_url: str = "192.168.1.223"
+    minio_port: int = 9000
+    minio_access_key: str = "...."
+    minio_secret_key: str = "..."
+    minio_bucket: str = "assistant"
+    # Weaviate
+    weaviate_host: str = "192.168.1.182"
+    weaviate_port: int = 8080
+    weaviate_grpc_port: int = 50051
+    # Chunking
+    chunk_size: int = 1024
+    chunk_overlap: int = 20
+    chunk_type: str = "word"
+    default_openai_embedding_model: str = "text-embedding-ada-002"
+    # JWT
+    SECRET_KEY: str = "1f3b2638a92fa81247e7090a57789c46ad3a4aa68e3caf65dd0dd019fa4eea5c"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 12
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    # openAI代理地址
+    openai_api_base: str = "...."
+    openai_api_key: str = "...."
+
+    openai_tti_base: str = "https://aihubmix.com/v1"
+    openai_tti_key: str = "...."
+    # 通义千问
+    qwen_api_base: str = "...."
+    qwen_api_key: str = "...."
+    # 火山引擎
+    vol_api_base: str = "https://ark.cn-beijing.volces.com/api/v3"
+    vol_api_key: str = "...."
+    vol_model_endpoint: str = "..."
+
+    # 默认模型
+    sel_model_provider: str = "openai"
+
+    # 日志设置
+    log_level: str = "waring"
+    log_dir: str = "./logs"
+
+    logging_config: dict = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "default": {
+                "format": "%(levelname)s %(asctime)s %(name)s %(message)s"
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "default",
+                "level": "WARNING",
+            },
+        },
+        "loggers": {
+            "sqlalchemy.engine": {
+                "handlers": ["console"],
+                "level": "INFO",
+                "propagate": False
+            },
+            "uvicorn": {
+                "handlers": ["console"],
+                "level": "INFO",
+                "propagate": False
+            },
+        },
+        "root": {
+            "handlers": ["console"],
+            "level": "WARNING",
+        },
+    }
+
+# 创建配置对象
+settings = APISettings()

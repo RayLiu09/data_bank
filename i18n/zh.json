@@ -1,0 +1,36 @@
+{
+  "login": {
+    "oldPwdError": "旧密码验证错误",
+    "expired": "登录已过期",
+    "authentication": "账户或密码错误"
+  },
+  "common": {
+    "createSuccess": "创建成功",
+    "createError": "创建失败",
+    "editSuccess": "更新成功",
+    "editError": "更新失败",
+    "delSuccess": "删除成功",
+    "delError": "删除失败"
+  },
+  "menu": {
+    "exitChild": "无法删除包含子菜单的菜单"
+  },
+  "token": {
+    "decodeError": "无效的Token",
+    "expired": "Token已过期"
+  },
+  "app": {
+    "appNotExists": "APP不存在",
+    "credentials": "凭证错误",
+    "appExists": "应用已存在",
+    "inactive": "应用已冻结，请激活",
+    "point": "应用点数已用完",
+    "requests": "应用请求次数过多"
+  },
+  "scenes": {
+    "scenesExists": "场景已存在"
+  },
+  "publish": {
+    "publishExists": "发布场景已存在"
+  }
+}

@@ -1,0 +1,1 @@
+RAG_TEMPLATE = "基于提供的知识回答用户问题：[用户问题：{INPUT}], [知识：{CONTEXT}]"

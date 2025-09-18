@@ -1,0 +1,36 @@
+{
+  "login": {
+    "oldPwdError": "Old password verification error",
+    "expired": "Login state expired",
+    "authentication": "Authentication failed"
+  },
+  "common": {
+    "createSuccess": "Create success",
+    "createError": "Create fail",
+    "editSuccess": "Update success",
+    "editError": "Update fail",
+    "delSuccess": "Delete success",
+    "delError": "Delete fail"
+  },
+  "menu": {
+    "exitChild": "Cannot delete a menu with child menus"
+  },
+  "token": {
+    "decodeError": "Invalid Token",
+    "expired": "Token has expired"
+  },
+  "app": {
+    "appNotExists": "The APP does not exist",
+    "credentials": "Could not validate credentials",
+    "appExists": "This app is exists",
+    "inactive": "Inactive app",
+    "point": "The number of points has been exhausted",
+    "requests": "Too many requests"
+  },
+  "scenes": {
+    "scenesExists": "This scene is exists"
+  },
+  "publish": {
+    "publishExists": "Publish scene is exists"
+  }
+}

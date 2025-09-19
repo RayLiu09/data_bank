@@ -39,7 +39,7 @@
   - 数字证书存储：数字证书存储，
   - KMS: step-ca支持通过配置字段kms来配置云端密钥管理服务，如awskms | azurekms | pkcs11 | cloudkms
   - 配置ACME类型的RA以支持证书的自动签发，验证和renew操作，首先需要创建一个ACME provisioner： step ca provisioner add acme --type ACME
-  ![img_1.png](img_1.png)
+
   - Root certificate和key应该被安全存储于cold storage，如Hardware Security Module(HSM)，并不应用于每日的证书签发操作，
     而interrmediate certificate和key可独立存储于云上HSM，KMS等用于CA的签发
   - 数字证书使用：用于验证数据发送方的合法身份

@@ -18,12 +18,12 @@ class APISettings(BaseSettings):
     # Host配置
     trusted_hosts: list[str] = ["*"]
     # Mysql配置
-    database_url: str = "mysql+pymysql://mysql:MySQL_2024@192.168.1.182:3306/data_bank?charset=utf8mb4&autocommit=true"
+    database_url: str = "mysql+pymysql://user:pass@192.168.1.182:3306/data_bank?charset=utf8mb4&autocommit=true"
     # Minio本地存储配置
     minio_url: str = "192.168.1.223"
     minio_port: int = 9000
-    minio_access_key: str = "yXFhlRbPpmKQlLa4iz1x"
-    minio_secret_key: str = "3Qib1q19h0b3jIsVIj65jgCsYqqdhVZXteJ7acPj"
+    minio_access_key: str = ""
+    minio_secret_key: str = ""
     minio_bucket: str = "assistant"
     # Weaviate
     weaviate_host: str = "192.168.1.182"
@@ -43,17 +43,17 @@ class APISettings(BaseSettings):
 
     # openAI代理地址
     openai_api_base: str = "https://api.nextapi.fun/openai/v1"
-    openai_api_key: str = "ak-iUSlJoxBgQTdTJIgflAZORBob8VDEdopbCyWMu9sq29YpWqY"
+    openai_api_key: str = ""
 
     openai_tti_base: str = "https://aihubmix.com/v1"
-    openai_tti_key: str = "sk-soj6sBwZfYrFBK4oDdB470D9D82c4615B78373C7F2Ce1c07"
+    openai_tti_key: str = ""
     # 通义千问
     qwen_api_base: str = "http://127.0.0.1:8003/qwen"
-    qwen_api_key: str = "sk-qw-pDaZZMcAjrTO1QfvuhWPPojEmoa2gXKiO902FJ8nhqtAGypi"
+    qwen_api_key: str = ""
     # 火山引擎
     vol_api_base: str = "https://ark.cn-beijing.volces.com/api/v3"
-    vol_api_key: str = "284423aa-0a73-4d7c-add5-31998942a3fd"
-    vol_model_endpoint: str = "ep-20250909175517-7j47q"
+    vol_api_key: str = ""
+    vol_model_endpoint: str = ""
 
     # 默认模型
     sel_model_provider: str = "openai"

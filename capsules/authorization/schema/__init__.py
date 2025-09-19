@@ -1,1 +1,1 @@
-from .grants import GrantPrivilege
+from .grant import GrantPrivilege

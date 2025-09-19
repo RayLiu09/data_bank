@@ -23,6 +23,8 @@ class DataCapsule(DBBase):
     grants: Mapped[list[GrantPrivilege]] = relationship("GrantPrivilege", back_populates="capsule")
     aes_key_id: Mapped[int] = Column(Integer, ForeignKey("secret_key.id"), comment="AES-256密钥ID")
     aes_key = relationship("SecretKey", back_populates="capsules")
+    additional_props_id: Mapped[int] = Column(Integer, ForeignKey("capsule_additional_props.id"), comment="附加属性ID")
+    additional_props = relationship("CapsuleAdditionalProps", back_populates="capsules")
 
     def __repr__(self):
         return f"DataCapsule(id={self.id}, uuid={self.uuid}, zkp={self.zkp}, zkp_digest={self.zkp_digest}, gene_data={self.gene_data}, gene_data_digest={self.gene_data_digest}, raw_data={self.raw_data}, raw_data_digest={self.raw_data_digest}, signature={self.signature}, create_time={self.create_time})"

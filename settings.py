@@ -2,6 +2,8 @@
 # FastApi系统配置文件
 # 运行前：请修改此配置文件cli方式启动
 #
+import os
+
 from pydantic_settings import BaseSettings
 
 
@@ -17,17 +19,24 @@ class APISettings(BaseSettings):
     server_port: int = 8000
     # Host配置
     trusted_hosts: list[str] = ["*"]
-    # Mysql配置
-    database_url: str = "mysql+pymysql://mysql:MySQL_2024@192.168.1.182:3306/data_bank?charset=utf8mb4&autocommit=true"
+    # Mysql配置从环境变量中获取
+    database_url: str = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8mb4&autocommit=true".format(
+        os.environ.get("DATABASE_USER", "mysql"),
+        os.environ.get("DATABASE_PASSWORD", "MySQL_2024"),
+        os.environ.get("DATABASE_HOST", "192.168.1.182"),
+        os.environ.get("DATABASE_PORT", "3306"),
+        os.environ.get("DATABASE_NAME", "data_bank"),
+    )
+
     # Minio本地存储配置
-    minio_url: str = "192.168.1.223"
+    minio_url: str = os.environ.get("MINIO_URL", "192.168.1.182")
     minio_port: int = 9000
-    minio_access_key: str = "yXFhlRbPpmKQlLa4iz1x"
-    minio_secret_key: str = "3Qib1q19h0b3jIsVIj65jgCsYqqdhVZXteJ7acPj"
-    minio_bucket: str = "assistant"
+    minio_access_key: str = os.environ.get("MINIO_ACCESS_KEY", "minio")
+    minio_secret_key: str = os.environ.get("MINIO_SECRET_KEY", "minio123")
+    minio_bucket: str = os.environ.get("MINIO_BUCKET", "data-bank")
     # Weaviate
-    weaviate_host: str = "192.168.1.182"
-    weaviate_port: int = 8080
+    weaviate_host: str = os.environ.get("WEAVIATE_HOST", "192.168.1.182")
+    weaviate_port: int = os.environ.get("WEAVIATE_PORT", "8080")
     weaviate_grpc_port: int = 50051
     # Chunking
     chunk_size: int = 1024
@@ -35,34 +44,39 @@ class APISettings(BaseSettings):
     chunk_type: str = "word"
     default_openai_embedding_model: str = "text-embedding-ada-002"
     # JWT
-    SECRET_KEY: str = "1f3b2638a92fa81247e7090a57789c46ad3a4aa68e3caf65dd0dd019fa4eea5c"
+    SECRET_KEY: str = os.environ.get("SECRET_KEY", "secret_key")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 12
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # openAI代理地址
-    openai_api_base: str = "https://api.nextapi.fun/openai/v1"
-    openai_api_key: str = "ak-iUSlJoxBgQTdTJIgflAZORBob8VDEdopbCyWMu9sq29YpWqY"
+    openai_api_base: str = os.environ.get("OPENAI_API_BASE", "")
+    openai_api_key: str = os.environ.get("OPENAI_API_KEY", "")
 
-    openai_tti_base: str = "https://aihubmix.com/v1"
-    openai_tti_key: str = "sk-soj6sBwZfYrFBK4oDdB470D9D82c4615B78373C7F2Ce1c07"
+    openai_tti_base: str = os.environ.get("OPENAI_TTI_BASE", "")
+    openai_tti_key: str = os.environ.get("OPENAI_TTI_KEY", "")
     # 通义千问
-    qwen_api_base: str = "http://127.0.0.1:8003/qwen"
-    qwen_api_key: str = "sk-qw-pDaZZMcAjrTO1QfvuhWPPojEmoa2gXKiO902FJ8nhqtAGypi"
+    qwen_api_base: str = os.environ.get("QWEN_API_BASE", "")
+    qwen_api_key: str = os.environ.get("QWEN_API_KEY", "")
     # 火山引擎
-    vol_api_base: str = "https://ark.cn-beijing.volces.com/api/v3"
-    vol_api_key: str = "284423aa-0a73-4d7c-add5-31998942a3fd"
-    vol_model_endpoint: str = "ep-20250909175517-7j47q"
+    vol_api_base: str = os.environ.get("VOL_API_BASE", "")
+    vol_api_key: str = os.environ.get("VOL_API_KEY", "")
+    vol_model_endpoint: str = os.environ.get("VOL_MODEL_ENDPOINT", "")
 
     # 默认模型
-    sel_model_provider: str = "openai"
+    sel_model_provider: str = os.environ.get("SEL_MODEL_PROVIDER", "openai")
 
+    # 密钥保护密码
+    SECRET_PASSPHRASE: str = os.environ.get("SECRET_PASSPHRASE", "")
     # 日志设置
     log_level: str = "waring"
     log_dir: str = "./logs"
     # 临时文件目录
     tmp_dir: str = "./upload"
+    # 密钥目录
+    certs_dir: str = "./certs"
+
     logging_config: dict = {
         "version": 1,
         "disable_existing_loggers": False,

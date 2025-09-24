@@ -1,0 +1,85 @@
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] 
+CREATE TABLE capsule_additional_props (
+	id INTEGER NOT NULL COMMENT '主键ID' AUTO_INCREMENT, 
+	uuid VARCHAR(36) NOT NULL COMMENT '数据唯一标识', 
+	type VARCHAR(5) COMMENT '胶囊数据类型，如10001-CT报告', 
+	owner VARCHAR(36) COMMENT '胶囊拥有者', 
+	producer VARCHAR(36) COMMENT '胶囊采集者', 
+	producer_time DATETIME COMMENT '胶囊采集时间', 
+	level INTEGER COMMENT '胶囊阶数', 
+	sexy INTEGER COMMENT '性别', 
+	age INTEGER COMMENT '年龄', 
+	area JSON COMMENT '地区', 
+	create_time DATETIME COMMENT '创建时间', 
+	PRIMARY KEY (id), 
+	UNIQUE (uuid)
+)
+
+
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [no key 0.00047s] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] CREATE INDEX ix_capsule_additional_props_id ON capsule_additional_props (id)
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [no key 0.00027s] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] 
+CREATE TABLE capsules (
+	id INTEGER NOT NULL COMMENT '主键ID' AUTO_INCREMENT, 
+	uuid VARCHAR(36) NOT NULL COMMENT '数据唯一标识', 
+	summary_ciphertext TEXT COMMENT '数据胶囊的概要数据', 
+	gene_ciphertext TEXT COMMENT '基因数据', 
+	raw_ciphertext TEXT COMMENT '原始数据', 
+	signature VARCHAR(512) COMMENT 'RSA-2048签名', 
+	create_time DATETIME COMMENT '创建时间', 
+	aes_key_id INTEGER COMMENT 'AES-256密钥ID', 
+	additional_props_id INTEGER COMMENT '附加属性ID', 
+	PRIMARY KEY (id), 
+	UNIQUE (uuid), 
+	FOREIGN KEY(aes_key_id) REFERENCES secret_key (id), 
+	FOREIGN KEY(additional_props_id) REFERENCES capsule_additional_props (id)
+)
+
+
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [no key 0.00028s] {}
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1899 - INFO] CREATE INDEX ix_capsules_id ON capsules (id)
+[2025-09-23 09:28:08 - sqlalchemy.engine.Engine:1904 - INFO] [no key 0.00021s] {}
+[2025-09-23 09:28:09 - sqlalchemy.engine.Engine:1899 - INFO] 
+CREATE TABLE capsule_claims (
+	id INTEGER NOT NULL COMMENT '主键ID' AUTO_INCREMENT, 
+	uuid VARCHAR(36) NOT NULL COMMENT '权限唯一标识', 
+	type VARCHAR(5) COMMENT '权限类型, 1-修改权，2-解释权，3-所有权, 4-使用权, 5-装让权, 6-阅读权,7-是否可追溯,8-预留, 其中4使用权可分4-1: 无限制，4-2: 不可多条件统计，4-3-1: 可看可用,4-3-2:可看不可用, 4-3-3:不可看可用', 
+	one_time_use BOOL COMMENT '是否一次性使用', 
+	expires_at DATETIME COMMENT '权限到期时间', 
+	deprecated BOOL COMMENT '是否弃用', 
+	authorizer VARCHAR(36) COMMENT '授权者', 
+	receiver VARCHAR(36) COMMENT '接收者', 
+	capsule_id INTEGER COMMENT '数据胶囊ID', 
+	create_time DATETIME COMMENT '创建时间', 
+	PRIMARY KEY (id), 
+	UNIQUE (uuid), 
+	FOREIGN KEY(capsule_id) REFERENCES capsules (id)
+)
+
+
+[2025-09-23 09:28:09 - sqlalchemy.engine.Engine:1904 - INFO] [no key 0.00033s] {}
+[2025-09-23 09:28:09 - sqlalchemy.engine.Engine:1899 - INFO] CREATE INDEX ix_capsule_claims_id ON capsule_claims (id)
+[2025-09-23 09:28:09 - sqlalchemy.engine.Engine:1904 - INFO] [no key 0.00021s] {}
+[2025-09-23 09:28:09 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT

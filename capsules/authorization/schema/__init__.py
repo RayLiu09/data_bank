@@ -1,1 +1,1 @@
-from .grant import GrantPrivilege
+from .claims import CapsuleClaim

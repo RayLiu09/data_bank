@@ -16,6 +16,9 @@ from security.v1.api import access_token_router
 from settings import settings
 from utils.ip_util import IPUtils
 from vectors.v1.api import vector_api_router
+import capsules.core.schema
+import capsules.authorization.schema
+import pki.kms
 
 # 后台任务函数
 # async def run_background_task(content: str):

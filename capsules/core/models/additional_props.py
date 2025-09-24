@@ -10,7 +10,9 @@ class CapsuleAdditionalPropsModel(BaseModel):
     """
     type: str = Field(..., description="Capsule类型")
     owner: str = Field(..., description="Capsule拥有者")
-    collector: Optional[str] = Field(..., description="Capsule采集者")
+    producer: Optional[str] = Field(..., description="Capsule采集者")
+    producer_time: Optional[datetime] = Field(..., description="Capsule采集时间")
+    level: Optional[int] = Field(1, description="Capsule阶数")
     sexy: Optional[int] = Field(..., description="Capsule拥有者性别")
     age: Optional[int] = Field(..., description="Capsule拥有者年龄")
     area: Optional[dict] = Field(..., description="Capsule拥有者所在地区")
@@ -30,7 +32,9 @@ class CapsuleAdditionalPropsView(CapsuleAdditionalPropsModel):
                 "id": 1,
                 "type": "10001",
                 "owner": "550e8400-e29b-41d4-a716-446655440000",
-                "collector": "1",
+                "producer": "550e8400-e29b-41d4-a716-446655440235",
+                "producer_time": "2021-01-01 00:00:00",
+                "level": 1,
                 "sexy": "1",
                 "age": 1,
                 "area": {"province": "1", "city": "1"},

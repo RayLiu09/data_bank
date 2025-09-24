@@ -21,7 +21,7 @@ class CapsuleAdditionalPropsRepository:
             age=additional_props_in.age,
             area=additional_props_in.area,
             type=additional_props_in.type,
-            collector=additional_props_in.collector
+            producer=additional_props_in.producer
         )
         db.add(additional_props)
         db.commit()

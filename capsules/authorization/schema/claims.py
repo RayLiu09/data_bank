@@ -8,8 +8,8 @@ from sqlalchemy.orm import Mapped, relationship
 from common.db_base import DBBase
 
 
-class GrantPrivilege(DBBase):
-    __tablename__ = "grant_privilege"
+class CapsuleClaim(DBBase):
+    __tablename__ = "capsule_claims"
 
     id: Mapped[int] = Column(Integer, autoincrement=True, primary_key=True, index=True, comment="主键ID")
     uuid: Mapped[str] = Column(String(36), unique=True, default=lambda: str(uuid.uuid4()), nullable=False, comment="权限唯一标识")
@@ -19,12 +19,12 @@ class GrantPrivilege(DBBase):
     deprecated: Mapped[bool] = Column(Boolean, default=False, comment="是否弃用")
     authorizer: Mapped[str] = Column(String(36), comment="授权者")
     receiver: Mapped[str] = Column(String(36), comment="接收者")
-    capsule_id: Mapped[int] = Column(Integer, ForeignKey("data_capsule.id"), comment="数据胶囊ID")
-    capsule = relationship("DataCapsule", back_populates="grants")
+    capsule_id: Mapped[int] = Column(Integer, ForeignKey("capsules.id"), comment="数据胶囊ID")
+    capsule = relationship("DataCapsule", back_populates="claims")
     create_time: Mapped[DateTime] = Column(DateTime, default=datetime.now, comment="创建时间")
 
     def __repr__(self):
-        return f"<GrantPrivilege(id={self.id}, uuid={self.uuid}, type={self.type}, one_time_use={self.one_time_use}, expires_at={self.expires_at}, deprecated={self.deprecated}, create_time={self.create_time})>"
+        return f"<CapsuleClaim(id={self.id}, uuid={self.uuid}, type={self.type}, one_time_use={self.one_time_use}, expires_at={self.expires_at}, deprecated={self.deprecated}, create_time={self.create_time})>"
 
     def to_dict(self):
         return {

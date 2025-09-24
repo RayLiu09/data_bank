@@ -34,3 +34,7 @@ weaviate-client
 pdfplumber
 pypdf
 #watchdog
+# For AES/RSA encrypt/decrypt
+pycryptodome
+# For X.509 Certificates
+cryptography

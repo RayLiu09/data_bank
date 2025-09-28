@@ -2,7 +2,7 @@ aiohttp
 fastapi==0.110.3
 h11
 httpcore
-httpx
+httpx==0.27.2
 numpy
 openai
 packaging
@@ -26,15 +26,19 @@ tiktoken
 SQLAlchemy
 pandas
 pypandoc
-python-docx
 #markdown_to_json
 asgiref
 spacy
 weaviate-client
 pdfplumber
 pypdf
+PyMuPDF
+pymupdf4llm
+# pymupdf-fonts
+python-docx
 #watchdog
 # For AES/RSA encrypt/decrypt
 pycryptodome
 # For X.509 Certificates
 cryptography
+minio

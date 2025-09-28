@@ -1,7 +1,10 @@
+import logging
+
 import aioredis
 
 from settings import settings
-from module_admin.utils.log_util import logger
+
+logger = logging.getLogger(__name__)
 
 
 class RedisUtil:

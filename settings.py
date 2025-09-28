@@ -3,6 +3,10 @@
 # 运行前：请修改此配置文件cli方式启动
 #
 import os
+from dotenv import load_dotenv
+
+# 首先加载.env文件中的环境变量
+load_dotenv()
 
 from pydantic_settings import BaseSettings
 
@@ -76,6 +80,8 @@ class APISettings(BaseSettings):
     tmp_dir: str = "./upload"
     # 密钥目录
     certs_dir: str = "./certs"
+    # OCR
+    tessdata_prefix: str = os.environ.get("TESSDATA_PREFIX", "")
 
     logging_config: dict = {
         "version": 1,

@@ -1,1 +1,1 @@
-from .logs import AuditLog
+from .audits import AuditLog

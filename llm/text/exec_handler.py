@@ -1,6 +1,5 @@
 import logging
 
-from fastapi import Depends
 from fastapi.encoders import jsonable_encoder
 from openai import AsyncClient, APIConnectionError, RateLimitError, APIStatusError
 

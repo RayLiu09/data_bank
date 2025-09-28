@@ -1,4 +1,3 @@
-from dns.e164 import query
 from sqlmodel import Session, and_
 
 from capsules.core.models.additional_props import CapsuleAdditionalPropsModel

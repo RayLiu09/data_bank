@@ -10,14 +10,7 @@ from loguru import logger
 from sqlalchemy import text
 
 from config.database import SessionLocal
-from module_admin.dao.job_dao import Session
-# 重写Cron定时
-from module_admin.entity.vo.job_vo import JobLogModel
-from module_admin.entity.vo.report_vo import ReportCreate
-from module_admin.service.job_log_service import JobLogService
-from module_admin.service.job_service import JobService
-from module_admin.service.report_service import ReportService
-from module_admin.service.requests_service import RequestsService
+
 
 
 class MyCronTrigger(CronTrigger):

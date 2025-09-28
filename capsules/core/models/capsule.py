@@ -11,6 +11,8 @@ class DataCapsuleModel(BaseModel):
     gene_data: Optional[dict] = Field(..., description="基因数据")
     raw_data: Optional[dict] = Field(..., description="原始数据")
     signature: Optional[str] = Field(..., description="RSA-2048签名")
+    aes_key_id: Optional[int] = Field(..., description="AES-128密钥ID")
+    additional_props_id: Optional[int] = Field(..., description="附加属性ID")
     additional_props: Optional[dict] = Field(..., description="元数据,明文存储用于1阶胶囊检索支撑")
 
 class DataCapsuleModelView(DataCapsuleModel):

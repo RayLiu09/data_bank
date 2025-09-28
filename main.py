@@ -16,6 +16,7 @@ from security.v1.api import access_token_router
 from settings import settings
 from utils.ip_util import IPUtils
 from vectors.v1.api import vector_api_router
+from capsules.authorization.v1.api import capsule_api_router
 import capsules.core.schema
 import capsules.authorization.schema
 import pki.kms
@@ -40,7 +41,8 @@ set_app(app)
 app.include_router(kb_api_router)
 app.include_router(vector_api_router)
 app.include_router(access_token_router)
-app.include_router(text_api_router)
+# app.include_router(text_api_router)
+app.include_router(capsule_api_router)
 
 # 跨域配置
 origins = ['*']

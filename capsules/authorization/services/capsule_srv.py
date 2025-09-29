@@ -14,7 +14,7 @@ from capsules.core.repository.additional_props import additional_props_repositor
 from capsules.core.repository.data_capsule import data_capsule_repo
 from capsules.utils import minio_client
 from capsules.utils.pdf_processor import PdfProcessor
-from llm.medical.capsule_loader import capsule_loader
+from llm.medical.capsule_loader import CapsuleLoader
 from pki.kms import SecretKey
 from pki.kms.core.aes import AESCipher
 from pki.kms.core.rsa import RSACipher
@@ -70,15 +70,21 @@ class CapsuleService:
             raw_data = await self._extract_raw_data_from_llm(markdown_content)
             
             # 1.3 采用ZKP算法计算数据概要数据
-            summary_data = await self._generate_summary_data(raw_data)
+            summary_data = await self._generate_summary_data(markdown_content)
             
             # 1.4 生成基因数据
             gene_data = await self._generate_gene_data(props)
             
             # 2. 加密阶段
-            # 2.1 从KMS服务获取对称加密密钥
-            aes_key = AESCipher.generate_key()
-            aes_iv = AESCipher.generate_iv()
+            # 如果已经存在可用的AES密钥，则直接使用
+            existed_aes_key = await self._get_aes_key(db)
+            if not existed_aes_key:
+                # 2.1 从KMS服务获取对称加密密钥
+                aes_key = AESCipher.generate_key()
+                aes_iv = AESCipher.generate_iv()
+            else:
+                aes_key = existed_aes_key.aes_key
+                aes_iv = existed_aes_key.aes_iv
             aes_cipher = AESCipher(aes_key, aes_iv)
             
             # 2.2 采用AES-CBC加密算法对raw_data, zkp_data和gene_data进行加密
@@ -105,14 +111,15 @@ class CapsuleService:
             additional_props = await additional_props_repository.create_additional_props(db, additional_props_model)
             
             # 3.2 存储数据加密密钥到secret_keys (这里简化处理，实际应安全存储)
-            secret_key = await self._store_encryption_key(db, aes_key, aes_iv)
+            if not existed_aes_key:
+                secret_key = await self._store_encryption_key(db, aes_key, aes_iv)
             # 3.3 创建数据胶囊
             data_capsule_model = DataCapsuleModel(
-                summary_data=summary_encrypted,
-                gene_data=gene_encrypted,
-                raw_data=raw_encrypted,
+                summary_ciphertext=summary_encrypted,
+                gene_ciphertext=gene_encrypted,
+                raw_ciphertext=raw_encrypted,
                 signature=signature,
-                aes_key_id=secret_key.id,
+                aes_key_id=secret_key.id if not existed_aes_key else existed_aes_key.id,
                 additional_props_id=additional_props.id
             )
             # 3.4 存储到数据库
@@ -142,12 +149,13 @@ class CapsuleService:
         logger.info("Extracting raw data from LLM")
         # 临时返回示例数据
         try:
+            capsule_loader = CapsuleLoader()
             return await capsule_loader.calc_raw_data_by_bnf(markdown_content)
         except Exception as e:
             logger.error(f"Failed to extract raw data: {str(e)}")
             raise
 
-    async def _generate_summary_data(self, raw_data: Dict[str, Any]) -> str:
+    async def _generate_summary_data(self, raw_data: str) -> str:
         """
         将raw_data将给LLM生成原始数据的精简概要数据
         
@@ -159,9 +167,10 @@ class CapsuleService:
         """
         # 实现数据概要计算逻辑
         logger.info("Generating summary data - placeholder implementation")
-        raw_data = json.dumps(raw_data)
+        # raw_data = json.dumps(raw_data, ensure_ascii=False)
         # 临时返回示例数据
         try:
+            capsule_loader = CapsuleLoader()
             return await capsule_loader.calc_summary_data_by_bnf(raw_data)
         except Exception as e:
             logger.error(f"Failed to generate ZKP data: {str(e)}")
@@ -178,18 +187,22 @@ class CapsuleService:
             Dict[str, Any]: 基因数据
         """
         gene_data = {
-            "collector_agent": props.collector_agent if props.collector_agent else "未知检测机构",
-            "collector_time": props.collector_time.isoformat() if props.collector_time else datetime.now().isoformat(),
-            "customer": props.customer if props.customer else "未知客户",
-            "gene_type": props.gene_type if props.gene_type else "基因检测",
-            "open_doctor": props.open_doctor if props.open_doctor else "未知医生",
-            "executor": props.executor if props.executor else "未知执行人",
-            "department": props.department if props.department else "未知科室"
+            "collector_agent": props.collector if props.collector else "未知检测机构",
+            "collector_time": datetime.now().isoformat(), # TODO: 后续根据报告时间获取
+            "customer": props.owner if props.owner else "未知客户",
+            "gene_type": props.type if props.type else "基因检测",
+            "open_doctor": "未知医生", # TODO: 后续根据报告获取执行医生
+            "executor": "未知执行人", # TODO: 后续根据报告获取执行医生
+            "department":  "未知科室", # TODO: 后续根据报告获取执行医生
+            "level": 1,
+            "age": props.age if props.age else 0,
+            "area": props.area if props.area else "未知地区",
+            "sexy": props.sexy if props.sexy else 0,
         }
         
         return gene_data
 
-    def _encrypt_data(self, data: Dict[str, Any], aes_cipher: AESCipher) -> str:
+    def _encrypt_data(self, data: str | Dict[str, Any], aes_cipher: AESCipher) -> str:
         """
         使用AES-GCM加密算法对数据进行加密
         
@@ -213,7 +226,7 @@ class CapsuleService:
             logger.error(f"Failed to encrypt data: {str(e)}")
             raise
 
-    def _sign_data(self, raw_data: Dict[str, Any], summary_data: Dict[str, Any], gene_data: Dict[str, Any]) -> str:
+    def _sign_data(self, raw_data: Dict[str, Any], summary_data: str | Dict[str, Any], gene_data: Dict[str, Any]) -> str:
         """
         采用数据银行的私钥对数据内容进行签名
         
@@ -257,13 +270,11 @@ class CapsuleService:
         """
         try:
             # 创建附加属性记录来存储密钥信息
-            props_data = {
-                "aes_key": key.hex(),
-                "aes_iv": iv.hex()
-            }
-            
+            key_model = KeyModel()
+            key_model.aes_key = key.hex()
+            key_model.aes_iv = iv.hex()
             # 存储1阶胶囊加密密钥
-            secret_key= await key_repository.create_key(db, KeyModel(**props_data))
+            secret_key= await key_repository.create_key(db, key_model)
             
             logger.info(f"Encryption key stored")
             return secret_key
@@ -293,5 +304,12 @@ class CapsuleService:
         finally:
             if os.path.exists(file_path):
                 os.remove(file_path)
+
+    async def _get_aes_key(self, db):
+        """
+        从secret_key获取最新为废弃的密钥
+        """
+        return await key_repository.get_first_undeprecated_key(db)
+
 
 capsule_srv = CapsuleService()

@@ -11,7 +11,8 @@ pydantic
 pydantic-settings
 pydantic_core
 #PyExecJS==1.5.1
-PyJWT
+# PyJWT 不能升级到2.10以上版本，因为其sub不支持非字符串类型
+PyJWT==2.9.0
 PyMySQL
 python-dotenv
 python-multipart

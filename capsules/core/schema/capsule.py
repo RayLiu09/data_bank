@@ -16,7 +16,7 @@ class DataCapsule(DBBase):
     summary_ciphertext: Mapped[dict] = Column(Text, comment="数据胶囊的概要数据")
     gene_ciphertext: Mapped[dict] = Column(Text, comment="基因数据")
     raw_ciphertext: Mapped[dict] = Column(Text, comment="原始数据")
-    signature: Mapped[str] = Column(String(512), comment="RSA-2048签名")
+    signature: Mapped[str] = Column(String(2048), comment="RSA-2048签名")
     create_time: Mapped[datetime] = Column(DateTime, default=datetime.now, comment="创建时间")
     claims: Mapped[list[CapsuleClaim]] = relationship("CapsuleClaim", back_populates="capsule")
     aes_key_id: Mapped[int] = Column(Integer, ForeignKey("secret_key.id"), comment="AES-256密钥ID")

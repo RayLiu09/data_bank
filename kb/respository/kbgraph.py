@@ -1,3 +1,5 @@
+from typing import Any
+
 from sqlalchemy import Sequence, select
 from sqlalchemy.orm import Session
 
@@ -22,13 +24,14 @@ class KBGraphRepository:
     async def count_kbgraph(self, db: Session) -> int:
         return db.query(KBGraph).count()
 
-    async def list_kbgraphs(self, db: Session, skip: int = 0, limit: int = 1000) -> dict[str, int | Sequence[KBGraph]]:
+    async def list_kbgraphs(self, db: Session, skip: int = 0, limit: int = 1000) -> dict[str, Any]:
         """
         List all KBGraph objects
         """
         statement = select(KBGraph).offset(skip).limit(limit).order_by(KBGraph.create_time.desc())
         kbgraphs = db.execute(statement).all()
-        return {"count": self.count_kbgraph(db), "kbgraphs": kbgraphs}
+        count = await self.count_kbgraph(db)
+        return {"count": count , "kbgraphs": kbgraphs}
 
     async def del_kbgraph(self, db: Session, kbgraph_id: int):
         """

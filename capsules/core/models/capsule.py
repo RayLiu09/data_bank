@@ -7,13 +7,13 @@ class DataCapsuleModel(BaseModel):
     """
     数据胶囊模型
     """
-    summary_data: Optional[str] = Field(..., description="概要数据")
-    gene_data: Optional[dict] = Field(..., description="基因数据")
-    raw_data: Optional[dict] = Field(..., description="原始数据")
-    signature: Optional[str] = Field(..., description="RSA-2048签名")
-    aes_key_id: Optional[int] = Field(..., description="AES-128密钥ID")
-    additional_props_id: Optional[int] = Field(..., description="附加属性ID")
-    additional_props: Optional[dict] = Field(..., description="元数据,明文存储用于1阶胶囊检索支撑")
+    summary_ciphertext: Optional[str] = Field(default= None, description="概要数据")
+    gene_ciphertext: Optional[str] = Field(default= None, description="基因数据")
+    raw_ciphertext: Optional[str] = Field(default= None, description="原始数据")
+    signature: Optional[str] = Field(default= None, description="RSA-2048签名")
+    aes_key_id: Optional[int] = Field(default= None, description="AES-128密钥ID")
+    additional_props_id: Optional[int] = Field(default= None, description="附加属性ID")
+    additional_props: Optional[dict] = Field(default= None, description="元数据,明文存储用于1阶胶囊检索支撑")
 
 class DataCapsuleModelView(DataCapsuleModel):
     """
@@ -29,8 +29,8 @@ class DataCapsuleModelView(DataCapsuleModel):
             "id": 1,
             "uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
             "create_time": "2025-01-01 00:00:00",
-            "summary_data": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-            "gene_data": {
+            "summary_ciphertext": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "gene_ciphertext": {
                 "collector_agent": "xxx三甲医院检测中心",
                 "collector_time": "2025-01-01 00:00:00",
                 "customer": "张三",
@@ -44,7 +44,7 @@ class DataCapsuleModelView(DataCapsuleModel):
                 # 科室名称
                 "executor_department": " Bioinformatics",
             },
-            "raw_data": {},
+            "raw_ciphertext": {},
             "signature": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
             "additional_props": {
                 "age": 18,

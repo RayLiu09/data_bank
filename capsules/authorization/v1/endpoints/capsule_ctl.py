@@ -4,6 +4,8 @@ import os.path
 from http import HTTPStatus
 
 from fastapi import APIRouter, UploadFile, Form
+from typing import Optional
+import json
 
 from capsules.authorization.models.collector import CollectorPropModel
 from capsules.authorization.services.capsule_srv import capsule_srv
@@ -17,7 +19,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.post("/collector", dependencies=[TokenDeps], summary="数据采集者将采集数据发送给数据拥有者")
-async def collect(db: SessionDep, file: UploadFile, props: CollectorPropModel = Form(..., description="数据胶囊附加属性")):
+async def collect(db: SessionDep, file: UploadFile, props: str = Form("{}", description="数据胶囊附加属性")):
     """
     Collect data capsule info, request data type: multipart/form-data, support upload file
 
@@ -25,18 +27,32 @@ async def collect(db: SessionDep, file: UploadFile, props: CollectorPropModel = 
     - file: uploaded file
     - props: Optional metadata info in JSON formatter
     """
+    # 解析props参数
+    try:
+        props_data = json.loads(props) if isinstance(props, str) else props
+        print("props_data:", props_data)
+        collector_props = CollectorPropModel(**props_data)
+    except Exception as e:
+        logger.error(f"Failed to parse props: {e}")
+        collector_props = CollectorPropModel()
+    
     # 将上传的数据文件保存到临时目录
     temp_dir = settings.tmp_dir
-    file_path = os.path.join(temp_dir, file.filename + "_" + datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M%S%f'))
+    # 确保临时目录存在
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)
+        
+    timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+    file_path = os.path.join(temp_dir, f"{file.filename}_{timestamp}")
     with open(file_path, 'wb') as buffer:
         contents = await file.read()
         buffer.write(contents)
 
     logger.info(f"File saved successfully: {file_path}, size: {len(contents)} bytes, and content_type: {file.content_type}")
     try:
-        response = await capsule_srv.wrap_data_capsule(db, file_path, props)
+        response = await capsule_srv.wrap_data_capsule(db, file_path, collector_props)
         logger.info(f"Collect data capsule info successfully: {response}")
+        return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=response)
     except Exception as e:
         logger.error(f"Collect data capsule info failed: {e}")
-
-    return response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=response)
+        return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"Collect data capsule info failed: {str(e)}")

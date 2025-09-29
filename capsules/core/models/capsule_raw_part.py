@@ -11,9 +11,9 @@ class CapsuleRawPart(BaseModel):
     # 数据生成时间戳
     gen_timestamp: HenTimestamp = Field(..., description="数据生成时间戳")
     # 数据生成单位
-    gen_agent: str = Field(..., description="数据生成单位")
+    gen_agent: str = Field(default= None, description="数据生成单位")
     # 报告单内容
-    data: dict = Field(..., description="报告单内容")
+    data: dict = Field(default= None, description="报告单内容")
 
     class Config:
         schema_extra = {

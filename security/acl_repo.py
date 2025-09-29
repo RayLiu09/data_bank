@@ -1,3 +1,4 @@
+import logging
 import uuid
 from datetime import datetime, timedelta
 from typing import Optional
@@ -6,7 +7,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from security.acl import AclControl
-
+logger = logging.getLogger(__name__)
 
 class AclControlCreate(BaseModel):
     tenant_uuid: str
@@ -28,7 +29,7 @@ class AclControlRepository:
         pass
 
     async def create_acl_control(self, db: Session, acl_control_in: AclControlCreate) -> AclControl:
-        db_acl_control = AclControl(**acl_control_in.model_dump(exclude_unset=True), acl_secret=uuid.uuid4().hex, expire_time=acl_control_in.expire_time)
+        db_acl_control = AclControl(**acl_control_in.model_dump(exclude_unset=True), acl_secret=uuid.uuid4().hex)
         db.add(db_acl_control)
         db.commit()
         db.refresh(db_acl_control)
@@ -39,6 +40,7 @@ class AclControlRepository:
         acl_control = db.query(AclControl).filter(AclControl.acl_key == acl_key,
                                                   AclControl.acl_secret == acl_secret,
                                                   AclControl.tenant_uuid == tenant_uuid).first()
+        logger.info(f"**************{acl_control}************")
         if acl_control and acl_control.expire_time > datetime.now():
             return True
         else:

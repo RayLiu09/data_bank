@@ -31,11 +31,20 @@ class KeyRepository:
         :return:
         """
         self.logger.info(f"create_key key: {key}")
-        key_create = key.model_dump(exclude_unset=True)
+        key_create = SecretKey(**key.model_dump(exclude_unset= True))
         db.add(key_create)
         db.commit()
         db.refresh(key_create)
 
         return key_create
+
+    async def get_first_undeprecated_key(self, db: Session) -> SecretKey:
+        """
+        获取第一个未弃用的密钥
+        :param db
+        :return:
+        """
+        self.logger.info(f"get_first_undeprecated_key")
+        return db.query(SecretKey).filter(SecretKey.deprecated == False).first()
 
 key_repository = KeyRepository()

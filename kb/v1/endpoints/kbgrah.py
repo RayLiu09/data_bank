@@ -27,7 +27,7 @@ async def list_kbgraphs(db: SessionDep, skip: int = 0, limit: int = 1000):
     """
     all_kbgraphs = await kbgraph_repo.list_kbgraphs(db, skip=skip, limit=limit)
 
-    return response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=all_kbgraphs)
+    return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=all_kbgraphs)
 
 
 
@@ -56,7 +56,7 @@ async def list_kbgraph_chapters(db: SessionDep, kbgraph_id: int) -> List[str]:
             if node.level_1 not in chapters:
                 chapters.append(node.level_1)
 
-    return response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=chapters)
+    return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=chapters)
 
 
 @router.post("/", dependencies=[TokenDeps], summary="Create a kbgraph by uploaded file")
@@ -97,7 +97,7 @@ async def create_kbgraph(file: Annotated[UploadFile, File(title="上传用于构
 
     await kbgraph_node_repo.create_kbgraph_node(db, kb_graph_node_list)
 
-    return response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=kb_graph)
+    return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=kb_graph)
 
 
 @router.get("/nodes", dependencies=[TokenDeps], summary="Fetch kbgraph nodes by kbgraph name")
@@ -106,7 +106,7 @@ async def fetch_kbgraph_nodes(db: SessionDep, kbgraph_name: str):
     Fetch kbgraph nodes by kbgraph name
     """
     all_kbgraph_nodes = await kbgraph_node_repo.fetch_kbgraph_nodes(db, kbgraph_name=kbgraph_name)
-    return response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=all_kbgraph_nodes)
+    return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=all_kbgraph_nodes)
 
 
 @router.delete("/nodes/{id}", dependencies=[TokenDeps], summary="Delete kbgraph node by id")
@@ -128,4 +128,4 @@ async def search_kbgraph_nodes(db: SessionDep, knowledge_name: str):
         All matched knowledge nodes
     """
     all_kbgraphs = await kbgraph_node_repo.search_kbgraph_nodes_with_book(db, knowledge_name=knowledge_name)
-    return response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=all_kbgraphs)
+    return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=all_kbgraphs)

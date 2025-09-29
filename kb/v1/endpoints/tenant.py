@@ -12,11 +12,12 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-@router.get("/{tenant_id}", response_model=Tenant, dependencies=[TokenDeps], summary="Fetch tenant by id")
+@router.get("", response_model=Tenant, dependencies=[TokenDeps], summary="Fetch tenant by id")
 async def get_tenant(db: SessionDep, tenant_uuid: str = Header(..., description="租户唯一标识")) -> Tenant:
     """
     Fetch tenant by id
     """
+    logger.info("Fetch tenant by id: %s", tenant_uuid)
     if tenant_uuid is None:
         return response_base.fail(code=400, msg="参数错误")
     return await tenant_repo.get_tenant_by_uuid(db, tenant_uuid)

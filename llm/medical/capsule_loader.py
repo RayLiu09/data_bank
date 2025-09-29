@@ -15,7 +15,7 @@ class CapsuleLoader:
     """
     Capsule的raw_data和summary_data准备类，主要用以与LLM交互获取对医疗影像报告数据的提取
     """
-    def __init__(self, vendor: str):
+    def __init__(self, vendor: str =  None):
         if vendor is None:
             vendor = settings.sel_model_provider
         self.model_base = ModelBase.instance(vendor)
@@ -44,7 +44,7 @@ class CapsuleLoader:
         """
         logger.info(f"Start to calc raw data using {self.model_base.model_settings['default_model']}")
         try:
-            bnf_template = get_capsule_section("raw_data").format(text=origin_text)
+            bnf_template = get_capsule_section("raw_data").replace("{text}", origin_text)
             result = await self.async_client.chat.completions.create(
                 model=self.model_base.model_settings["default_model"],
                 messages=[
@@ -80,7 +80,7 @@ class CapsuleLoader:
             医疗报告内容概要说明
         """
         logger.info(f"Start to calc summary data using {self.model_base.model_settings['default_model']}")
-        bnf_template = get_capsule_section("summary_data").format(text=origin_text)
+        bnf_template = get_capsule_section("summary_data").replace("{text}", origin_text)
         try:
             result = await self.async_client.chat.completions.create(
                 model=self.model_base.model_settings["default_model"],
@@ -103,5 +103,3 @@ class CapsuleLoader:
                          f"and response {e.response}")
         finally:
             await self.async_client.close()
-
-capsule_loader = CapsuleLoader(settings.sel_model_provider)

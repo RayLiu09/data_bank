@@ -10,12 +10,12 @@ class CapsuleAdditionalPropsModel(BaseModel):
     """
     type: str = Field(..., description="Capsule类型")
     owner: str = Field(..., description="Capsule拥有者")
-    producer: Optional[str] = Field(..., description="Capsule采集者")
-    producer_time: Optional[datetime] = Field(..., description="Capsule采集时间")
+    producer: Optional[str] = Field(default= None, description="Capsule采集者")
+    producer_time: Optional[datetime] = Field(default= None, description="Capsule采集时间")
     level: Optional[int] = Field(1, description="Capsule阶数")
-    sexy: Optional[int] = Field(..., description="Capsule拥有者性别")
-    age: Optional[int] = Field(..., description="Capsule拥有者年龄")
-    area: Optional[dict] = Field(..., description="Capsule拥有者所在地区")
+    sexy: Optional[int] = Field(default=None, description="Capsule拥有者性别")
+    age: Optional[int] = Field(default= None, description="Capsule拥有者年龄")
+    area: Optional[dict] = Field(default= None, description="Capsule拥有者所在地区")
 
 class CapsuleAdditionalPropsView(CapsuleAdditionalPropsModel):
     """

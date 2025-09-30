@@ -1,12 +1,15 @@
+import base64
 import json
 import logging
+import mimetypes
 import os.path
 import uuid
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from sqlmodel import Session
 
+from capsules.audit.repository.audits import audit_repository
 from capsules.authorization.models.collector import CollectorPropModel
 from capsules.core.models.additional_props import CapsuleAdditionalPropsModel
 from capsules.core.models.capsule import DataCapsuleModel
@@ -14,6 +17,7 @@ from capsules.core.repository.additional_props import additional_props_repositor
 from capsules.core.repository.data_capsule import data_capsule_repo
 from capsules.utils import minio_client
 from capsules.utils.pdf_processor import PdfProcessor
+from common.db_deps import SessionDep
 from llm.medical.capsule_loader import CapsuleLoader
 from pki.kms import SecretKey
 from pki.kms.core.aes import AESCipher
@@ -27,7 +31,7 @@ class CapsuleService:
     def __init__(self):
         self.pdf_processor = PdfProcessor()
 
-    async def wrap_data_capsule(self, db: Session, file: str, props: CollectorPropModel) -> str | None:
+    async def wrap_data_capsule(self, db: SessionDep, file: str, props: CollectorPropModel) -> str | None:
         """
         根据传入的报告内容和附属信息，进行1阶胶囊的数据封装
 
@@ -52,7 +56,8 @@ class CapsuleService:
                 "department": " Bioinformatics"}，定义为gene_data
         - 从KMS服务获取对称加密密钥，采用AES-GCM加密算法对raw_data, summary_data和gene_data进行加密， 同时采用数据银行的私钥对数据内容进行签名得到signature
         - 存储1阶胶囊数据到DBMS， 并存储数据加密密钥到secret_keys
-        - (可选)原始医疗影像数据的存储到MinIO对象存储
+        - 原始医疗影像数据的存储到MinIO对象存储
+        - 生成1阶胶囊封装审计日志
         """
         try:
             # 1. 预处理阶段
@@ -83,8 +88,10 @@ class CapsuleService:
                 aes_key = AESCipher.generate_key()
                 aes_iv = AESCipher.generate_iv()
             else:
-                aes_key = existed_aes_key.aes_key
-                aes_iv = existed_aes_key.aes_iv
+                # 2.2 从数据库中获取密钥,并将base64编码后的密钥和初始向量进行base64解码转为bytes类型
+                aes_key = base64.b64decode(existed_aes_key.aes_key)
+                aes_iv = base64.b64decode(existed_aes_key.aes_iv)
+
             aes_cipher = AESCipher(aes_key, aes_iv)
             
             # 2.2 采用AES-CBC加密算法对raw_data, zkp_data和gene_data进行加密
@@ -126,8 +133,9 @@ class CapsuleService:
             data_capsule = await data_capsule_repo.create_data_capsule(db, data_capsule_model)
             # 4. (可选)原始医疗影像数据的存储到MinIO对象存储
             await self._store_medical_images(file, data_capsule.uuid)
-            
             logger.info(f"Data capsule created successfully with UUID: {data_capsule.uuid}")
+            await self._generate_audit_log(db, data_capsule.uuid)
+
             return data_capsule.uuid
             
         except Exception as e:
@@ -271,8 +279,8 @@ class CapsuleService:
         try:
             # 创建附加属性记录来存储密钥信息
             key_model = KeyModel()
-            key_model.aes_key = key.hex()
-            key_model.aes_iv = iv.hex()
+            key_model.aes_key = base64.b64encode(key).decode('utf-8')
+            key_model.aes_iv = base64.b64encode(iv).decode('utf-8')
             # 存储1阶胶囊加密密钥
             secret_key= await key_repository.create_key(db, key_model)
             
@@ -295,7 +303,12 @@ class CapsuleService:
         """
         try:
             # 实现医疗影像数据存储到MinIO
-            await minio_client.upload_file(file_path, capsule_uuid)
+            # 获取当前文件的Mine Type
+            mine_type = mimetypes.guess_type(file_path)[0]
+            # PDF文件的mine type为application/pdf
+            if not mine_type:
+                mine_type = "application/pdf"
+            await minio_client.upload_file(file_path, capsule_uuid, mine_type)
             logger.info(f"Storing medical images to MinIO for capsule: {capsule_uuid}")
             return True
         except Exception as e:
@@ -311,5 +324,40 @@ class CapsuleService:
         """
         return await key_repository.get_first_undeprecated_key(db)
 
+    async def _generate_audit_log(self, db, uuid):
+        """
+        生成1阶胶囊封装日志记录
+        """
+        audit_log = await audit_repository.save_audit(db, {"capsule_uuid": uuid})
+        logger.info(f"Audit log generated for capsule: {uuid}")
+        return audit_log
+
+    async def get_raw_data(self, db: SessionDep, uuid: str) -> str:
+        """
+        获取原始数据
+
+        Args:
+            db: 数据库会话
+            uuid: 胶囊UUID
+
+        Returns:
+            str: 原始数据
+        """
+        # 根据胶囊的uuid从MinIO对象存储获取原始数据的签名访问链接
+        return minio_client.get_file_url(uuid)
+
+    async def list_capsules(self, db: SessionDep, offset: int = 0, limit: int = 10) -> List[DataCapsuleModel]:
+        """
+        列出1阶胶囊列表
+
+        Args:
+            db: 数据库会话
+            offset: 偏移量
+            limit: 限制数量
+
+        Returns:
+            List[DataCapsuleModel]: 1阶胶囊列表
+        """
+        return await data_capsule_repo.list_data_capsule(db, offset, limit)
 
 capsule_srv = CapsuleService()

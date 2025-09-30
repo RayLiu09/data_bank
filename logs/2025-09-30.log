@@ -1,0 +1,350 @@
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:19:47 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:26:35 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:29:07 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:29:07 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 14:29:07 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00185s] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 14:29:07 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK
+[2025-09-30 14:29:26 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:29:26 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 14:29:26 - sqlalchemy.engine.Engine:1904 - INFO] [cached since 18.98s ago] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 14:29:48 - sqlalchemy.engine.Engine:1899 - INFO] SELECT secret_key.id AS secret_key_id, secret_key.uuid AS secret_key_uuid, secret_key.aes_key AS secret_key_aes_key, secret_key.aes_operation_mode AS secret_key_aes_operation_mode, secret_key.aes_iv AS secret_key_aes_iv, secret_key.deprecated AS secret_key_deprecated, secret_key.create_time AS secret_key_create_time 
+FROM secret_key 
+WHERE secret_key.deprecated = false 
+ LIMIT %(param_1)s
+[2025-09-30 14:29:48 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00032s] {'param_1': 1}
+[2025-09-30 14:29:48 - capsules.authorization.services.capsule_srv:138 - ERROR] Failed to wrap data capsule: Incorrect AES key length (64 bytes)
+[2025-09-30 14:29:48 - capsules.authorization.v1.endpoints.capsule_ctl:57 - ERROR] Collect data capsule info failed: Incorrect AES key length (64 bytes)
+[2025-09-30 14:29:48 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:39:48 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:39:55 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:39:55 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 14:39:55 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00024s] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 14:40:15 - sqlalchemy.engine.Engine:1899 - INFO] SELECT secret_key.id AS secret_key_id, secret_key.uuid AS secret_key_uuid, secret_key.aes_key AS secret_key_aes_key, secret_key.aes_operation_mode AS secret_key_aes_operation_mode, secret_key.aes_iv AS secret_key_aes_iv, secret_key.deprecated AS secret_key_deprecated, secret_key.create_time AS secret_key_create_time 
+FROM secret_key 
+WHERE secret_key.deprecated = false 
+ LIMIT %(param_1)s
+[2025-09-30 14:40:15 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00037s] {'param_1': 1}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] INSERT INTO capsule_additional_props (uuid, type, owner, producer, producer_time, level, sexy, age, area, create_time) VALUES (%(uuid)s, %(type)s, %(owner)s, %(producer)s, %(producer_time)s, %(level)s, %(sexy)s, %(age)s, %(area)s, %(create_time)s)
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00038s] {'uuid': 'c66c9754-95dc-42db-83cb-620136acad25', 'type': '10005', 'owner': 'd5e8cecb-5869-44c3-856b-9be9bffe98f8', 'producer': 'a425202f-c98d-4d74-a063-966a904d9db0', 'producer_time': None, 'level': 1, 'sexy': 0, 'age': 0, 'area': 'null', 'create_time': datetime.datetime(2025, 9, 30, 14, 40, 16, 172175)}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] SELECT capsule_additional_props.id, capsule_additional_props.uuid, capsule_additional_props.type, capsule_additional_props.owner, capsule_additional_props.producer, capsule_additional_props.producer_time, capsule_additional_props.level, capsule_additional_props.sexy, capsule_additional_props.age, capsule_additional_props.area, capsule_additional_props.create_time 
+FROM capsule_additional_props 
+WHERE capsule_additional_props.id = %(pk_1)s
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00036s] {'pk_1': 12}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] INSERT INTO secret_key (uuid, aes_key, aes_operation_mode, aes_iv, deprecated, create_time) VALUES (%(uuid)s, %(aes_key)s, %(aes_operation_mode)s, %(aes_iv)s, %(deprecated)s, %(create_time)s)
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00028s] {'uuid': '81a17cb3-4602-4252-9913-29cc61bd85af', 'aes_key': 'vBFqegQMfy5oBXaeLNA26Pt6qLtv9XGUP5o7i2aK6Wo=', 'aes_operation_mode': 'CBC', 'aes_iv': 'HJg9SHu+fLFxfqZrTKpN8A==', 'deprecated': 0, 'create_time': datetime.datetime(2025, 9, 30, 14, 40, 16, 183690)}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] SELECT secret_key.id, secret_key.uuid, secret_key.aes_key, secret_key.aes_operation_mode, secret_key.aes_iv, secret_key.deprecated, secret_key.create_time 
+FROM secret_key 
+WHERE secret_key.id = %(pk_1)s
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00023s] {'pk_1': 8}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] SELECT capsule_additional_props.id AS capsule_additional_props_id, capsule_additional_props.uuid AS capsule_additional_props_uuid, capsule_additional_props.type AS capsule_additional_props_type, capsule_additional_props.owner AS capsule_additional_props_owner, capsule_additional_props.producer AS capsule_additional_props_producer, capsule_additional_props.producer_time AS capsule_additional_props_producer_time, capsule_additional_props.level AS capsule_additional_props_level, capsule_additional_props.sexy AS capsule_additional_props_sexy, capsule_additional_props.age AS capsule_additional_props_age, capsule_additional_props.area AS capsule_additional_props_area, capsule_additional_props.create_time AS capsule_additional_props_create_time 
+FROM capsule_additional_props 
+WHERE capsule_additional_props.id = %(pk_1)s
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00019s] {'pk_1': 12}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] INSERT INTO capsules (uuid, summary_ciphertext, gene_ciphertext, raw_ciphertext, signature, create_time, aes_key_id, additional_props_id) VALUES (%(uuid)s, %(summary_ciphertext)s, %(gene_ciphertext)s, %(raw_ciphertext)s, %(signature)s, %(create_time)s, %(aes_key_id)s, %(additional_props_id)s)
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00030s] {'uuid': '5775958b-1c06-40a7-869d-3cb3715ceaf3', 'summary_ciphertext': 'G8zu/byX2ZHdkLiEp2araof0u9yJbCTVYCXR8JTIU8UWV4ZKkU9LBHOG4OGY1XCV//bSNVi5aITOqtQo7PVNJU1Hk+MDEKoS6YpV7OEQta8knpN0T7Zjb/KoCL+WTnEb1VMOoq0GxUgRFJ9ZZlZ47 ... (110 characters truncated) ... GNZKoDeaOokwPi/coHBmNK7YZxVH3LVOIJnE8HCwgY9h0bML4rj4iHSwZ+IUFyVQyD68kvzd4YlZcZN9Hz6SFhJ8Dfl082FUdKOzwc5zwcHa1eU1OJ17xINFJH5C6jv6f8vYxT3Co8i0IKP8LqQ==', 'gene_ciphertext': 'Q9Zfao93YFuFnKTV04z161wo25AhmRZj1uc5A4Ugl+xOKJlAIucxJjCkMd065RaX8OysPVfklWVagpYeRbuO/ATWDxm8vPBuixkVLonqx6OnNvjkB1s60g9pors+UxaMqgbFQizcPgP17yPKwNW5M ... (150 characters truncated) ... VfQhJdJfiZ+R70pmeyBiPLTSzdeB8zxc8rTm4128vCFk9YRoQDrysE9rIW0M3EkGmriIWxq+SFHybDTD1fW/P7MRbLtg1qwFbfhZmgqTW1olbA9nmylWkQj9myMvXLgcO4vMlGA2eJMwJyEtvChAd', 'raw_ciphertext': 'WwRA7M7h+Cp2ee8EV3wfpIdJHSEfYZZG8lg4a+pt9ScdnlKyRHflQjvrYN6AM+H0D4MAzn2+ArV/i1J0yU3yEaIGDVcdGDsLRenKYR5c2s2sYc1EgWc1XPcjry+mpKmwU3vc63qV7T9h/dwQv/M6y ... (790 characters truncated) ... BOFGK9repvUDjHkwAJY3KXSPy1/14/1MXhTPevi6jCIMMGLMG+D0TsI0GR7w5D5DGu1e7t97l0Sk9boWa17mEjB2pfza5DXrXuyNS0uObIejpGi0yzQxIhlDPw2XKM+55WISgRZYl8mD/h3rdVKOu', 'signature': '0x5d93cea8b7cb15f06d1d55dc26b9d721fa336f041f7ee452a0d80bdb622043adf71ca5523c0614c8e22e9948f7db8417bb1f02f30162af9ccf322f9ed8f30555e973fab710c98f60282 ... (216 characters truncated) ... 4962e67bba9c4cee809bfe37d50e6ea6371c91cf507a54f2204c670c4f3dd14235204bf0cafd3d10ceb973e72f008f288f10ec69e7a18ae738e8d3318c7442d058cda6397a4ab2af272b8', 'create_time': datetime.datetime(2025, 9, 30, 14, 40, 16, 195250), 'aes_key_id': 8, 'additional_props_id': 12}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] SELECT capsules.id, capsules.uuid, capsules.summary_ciphertext, capsules.gene_ciphertext, capsules.raw_ciphertext, capsules.signature, capsules.create_time, capsules.aes_key_id, capsules.additional_props_id 
+FROM capsules 
+WHERE capsules.id = %(pk_1)s
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00022s] {'pk_1': 2}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1899 - INFO] INSERT INTO audit_log (uuid, capsule_uuid, claim_uuid, create_time) VALUES (%(uuid)s, %(capsule_uuid)s, %(claim_uuid)s, %(create_time)s)
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00042s] {'uuid': '1c4b8186-08d2-4b88-aae6-f1147278d6f7', 'capsule_uuid': '5775958b-1c06-40a7-869d-3cb3715ceaf3', 'claim_uuid': None, 'create_time': datetime.datetime(2025, 9, 30, 14, 40, 16, 289788)}
+[2025-09-30 14:40:16 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK
+[2025-09-30 14:40:16 - capsules.authorization.services.capsule_srv:140 - ERROR] Failed to wrap data capsule: (pymysql.err.OperationalError) (1054, "Unknown column 'claim_uuid' in 'field list'")
+[SQL: INSERT INTO audit_log (uuid, capsule_uuid, claim_uuid, create_time) VALUES (%(uuid)s, %(capsule_uuid)s, %(claim_uuid)s, %(create_time)s)]
+[parameters: {'uuid': '1c4b8186-08d2-4b88-aae6-f1147278d6f7', 'capsule_uuid': '5775958b-1c06-40a7-869d-3cb3715ceaf3', 'claim_uuid': None, 'create_time': datetime.datetime(2025, 9, 30, 14, 40, 16, 289788)}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-09-30 14:40:16 - capsules.authorization.v1.endpoints.capsule_ctl:57 - ERROR] Collect data capsule info failed: (pymysql.err.OperationalError) (1054, "Unknown column 'claim_uuid' in 'field list'")
+[SQL: INSERT INTO audit_log (uuid, capsule_uuid, claim_uuid, create_time) VALUES (%(uuid)s, %(capsule_uuid)s, %(claim_uuid)s, %(create_time)s)]
+[parameters: {'uuid': '1c4b8186-08d2-4b88-aae6-f1147278d6f7', 'capsule_uuid': '5775958b-1c06-40a7-869d-3cb3715ceaf3', 'claim_uuid': None, 'create_time': datetime.datetime(2025, 9, 30, 14, 40, 16, 289788)}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:45:34 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:45:47 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:45:47 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 14:45:47 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00031s] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 14:46:18 - sqlalchemy.engine.Engine:1899 - INFO] SELECT secret_key.id AS secret_key_id, secret_key.uuid AS secret_key_uuid, secret_key.aes_key AS secret_key_aes_key, secret_key.aes_operation_mode AS secret_key_aes_operation_mode, secret_key.aes_iv AS secret_key_aes_iv, secret_key.deprecated AS secret_key_deprecated, secret_key.create_time AS secret_key_create_time 
+FROM secret_key 
+WHERE secret_key.deprecated = false 
+ LIMIT %(param_1)s
+[2025-09-30 14:46:18 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00051s] {'param_1': 1}
+[2025-09-30 14:46:18 - capsules.authorization.services.capsule_srv:140 - ERROR] Failed to wrap data capsule: a bytes-like object is required, not 'str'
+[2025-09-30 14:46:18 - capsules.authorization.v1.endpoints.capsule_ctl:57 - ERROR] Collect data capsule info failed: a bytes-like object is required, not 'str'
+[2025-09-30 14:46:18 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:49:08 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:49:14 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:49:14 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 14:49:14 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00028s] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 14:49:37 - sqlalchemy.engine.Engine:1899 - INFO] SELECT secret_key.id AS secret_key_id, secret_key.uuid AS secret_key_uuid, secret_key.aes_key AS secret_key_aes_key, secret_key.aes_operation_mode AS secret_key_aes_operation_mode, secret_key.aes_iv AS secret_key_aes_iv, secret_key.deprecated AS secret_key_deprecated, secret_key.create_time AS secret_key_create_time 
+FROM secret_key 
+WHERE secret_key.deprecated = false 
+ LIMIT %(param_1)s
+[2025-09-30 14:49:37 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00068s] {'param_1': 1}
+[2025-09-30 14:49:37 - capsules.authorization.services.capsule_srv:142 - ERROR] Failed to wrap data capsule: 'KeyRepository' object has no attribute 'get_key_by_uuid'
+[2025-09-30 14:49:37 - capsules.authorization.v1.endpoints.capsule_ctl:57 - ERROR] Collect data capsule info failed: 'KeyRepository' object has no attribute 'get_key_by_uuid'
+[2025-09-30 14:49:37 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:50:05 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:50:09 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:50:09 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 14:50:09 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00025s] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 14:50:25 - sqlalchemy.engine.Engine:1899 - INFO] SELECT secret_key.id AS secret_key_id, secret_key.uuid AS secret_key_uuid, secret_key.aes_key AS secret_key_aes_key, secret_key.aes_operation_mode AS secret_key_aes_operation_mode, secret_key.aes_iv AS secret_key_aes_iv, secret_key.deprecated AS secret_key_deprecated, secret_key.create_time AS secret_key_create_time 
+FROM secret_key 
+WHERE secret_key.deprecated = false 
+ LIMIT %(param_1)s
+[2025-09-30 14:50:25 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00041s] {'param_1': 1}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] INSERT INTO capsule_additional_props (uuid, type, owner, producer, producer_time, level, sexy, age, area, create_time) VALUES (%(uuid)s, %(type)s, %(owner)s, %(producer)s, %(producer_time)s, %(level)s, %(sexy)s, %(age)s, %(area)s, %(create_time)s)
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00056s] {'uuid': '41042a3c-43b3-43f5-9c6c-982160735da2', 'type': '10005', 'owner': 'd5e8cecb-5869-44c3-856b-9be9bffe98f8', 'producer': 'a425202f-c98d-4d74-a063-966a904d9db0', 'producer_time': None, 'level': 1, 'sexy': 0, 'age': 0, 'area': 'null', 'create_time': datetime.datetime(2025, 9, 30, 14, 50, 26, 182056)}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] SELECT capsule_additional_props.id, capsule_additional_props.uuid, capsule_additional_props.type, capsule_additional_props.owner, capsule_additional_props.producer, capsule_additional_props.producer_time, capsule_additional_props.level, capsule_additional_props.sexy, capsule_additional_props.age, capsule_additional_props.area, capsule_additional_props.create_time 
+FROM capsule_additional_props 
+WHERE capsule_additional_props.id = %(pk_1)s
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00023s] {'pk_1': 13}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] SELECT secret_key.id AS secret_key_id, secret_key.uuid AS secret_key_uuid, secret_key.aes_key AS secret_key_aes_key, secret_key.aes_operation_mode AS secret_key_aes_operation_mode, secret_key.aes_iv AS secret_key_aes_iv, secret_key.deprecated AS secret_key_deprecated, secret_key.create_time AS secret_key_create_time 
+FROM secret_key 
+WHERE secret_key.id = %(pk_1)s
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00018s] {'pk_1': 8}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] INSERT INTO capsules (uuid, summary_ciphertext, gene_ciphertext, raw_ciphertext, signature, create_time, aes_key_id, additional_props_id) VALUES (%(uuid)s, %(summary_ciphertext)s, %(gene_ciphertext)s, %(raw_ciphertext)s, %(signature)s, %(create_time)s, %(aes_key_id)s, %(additional_props_id)s)
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00021s] {'uuid': '8841b07a-18d4-44b6-be96-9424390d34b1', 'summary_ciphertext': 'oLaHpKSqON0ROQglJIK1adV48C9zmOQ0ps1s0f7xtabfr4DQM9WF7NY3w9advdFfBp5me97Vmz/JIoZvrJ63+n7yBqX0kQd6jkXcEcXKC+er9gl9IvHh/V340mM9Kti32cIzmDKHwQmHulPlWwEGs ... (22 characters truncated) ... RxT1MU4MFRr2cc7z95FF8fWuddO6/EbJrV2VJ8JxyTA7E6kR3werXv9lgQ/LQcsyMRA9dPXWHSDhhI7ayFTuvaqM7y1kVJWu8lFq85QiEg2Q8vxYmp68u9ffMBxhQhmrFGumXzoBl/8AgV5PLTtyY', 'gene_ciphertext': 'Q9Zfao93YFuFnKTV04z161wo25AhmRZj1uc5A4Ugl+xOKJlAIucxJjCkMd065RaX8OysPVfklWVagpYeRbuO/ATWDxm8vPBuixkVLonqx6PiGTxWNxopgHOgobcEjIWIC+7ukmBmVvTfUqqIK7npr ... (150 characters truncated) ... NLbEIlC2Va3jfpIltxdvID7UvyK+4glyf+qLWEYbrj6UwbSVC67CHvOyMcLhvApRejbEvSWo/5KR7hPKg2+E/3AbSvlD7KMxxKi7bfTO7ly6qYrzhFBQ9A/hy91+rOzXul68Y841oIm4U/wmt78Hs', 'raw_ciphertext': 'WwRA7M7h+Cp2ee8EV3wfpIdJHSEfYZZG8lg4a+pt9ScdnlKyRHflQjvrYN6AM+H0Y/gDHlGNB7Cj1BFybv6m5gGdbfNN16fBG7ixU8L8MzGjN+F9h2849tTwTlAF2xRei408yHTS9Y288xupgDGQ2 ... (814 characters truncated) ... 4nWdewGtz6B76bxUUXDiKx/vVtep5/i7XJVcwQtuArA6IMqmVtIEzRHKq0FFUnuvkJlOQnEq+bWROMLZ1FIAnk3ih+EWBJZciU3KcvXd/Hoh45d9hox7rqox/kDWEF0is6KgK31wpt2zavD8fjw==', 'signature': '0x84e25ad27532e4642cc6eba221be5b2973075251ec5fbe95f4e549baf174394a8070630edb40994fd5cf8725351d71fec72a578cbedcb3c76c0addf021789238e4969bc3162a4741abd ... (215 characters truncated) ... b1414f85bbf301a3ff45b43a1da59f4c16146ed4fe0108cad406203a21d2fcd01a0fff448e85e22f2f7315258ab970521ff57337e25a5c1efd21f57a4b909c3887f7349fe8a7e8b353ffd', 'create_time': datetime.datetime(2025, 9, 30, 14, 50, 26, 194565), 'aes_key_id': 8, 'additional_props_id': 13}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] SELECT capsules.id, capsules.uuid, capsules.summary_ciphertext, capsules.gene_ciphertext, capsules.raw_ciphertext, capsules.signature, capsules.create_time, capsules.aes_key_id, capsules.additional_props_id 
+FROM capsules 
+WHERE capsules.id = %(pk_1)s
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00017s] {'pk_1': 3}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] INSERT INTO audit_log (uuid, capsule_uuid, claim_uuid, create_time) VALUES (%(uuid)s, %(capsule_uuid)s, %(claim_uuid)s, %(create_time)s)
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00034s] {'uuid': '6d24c2a9-5042-44cc-ad33-839f4bf16a44', 'capsule_uuid': '8841b07a-18d4-44b6-be96-9424390d34b1', 'claim_uuid': None, 'create_time': datetime.datetime(2025, 9, 30, 14, 50, 26, 288217)}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] SELECT audit_log.id, audit_log.uuid, audit_log.capsule_uuid, audit_log.claim_uuid, audit_log.create_time 
+FROM audit_log 
+WHERE audit_log.id = %(pk_1)s
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00017s] {'pk_1': 1}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1899 - INFO] SELECT capsules.id AS capsules_id, capsules.uuid AS capsules_uuid, capsules.summary_ciphertext AS capsules_summary_ciphertext, capsules.gene_ciphertext AS capsules_gene_ciphertext, capsules.raw_ciphertext AS capsules_raw_ciphertext, capsules.signature AS capsules_signature, capsules.create_time AS capsules_create_time, capsules.aes_key_id AS capsules_aes_key_id, capsules.additional_props_id AS capsules_additional_props_id 
+FROM capsules 
+WHERE capsules.id = %(pk_1)s
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00018s] {'pk_1': 3}
+[2025-09-30 14:50:26 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 14:58:36 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 14:59:26 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 14:59:26 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 14:59:26 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00025s] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 14:59:26 - capsules.authorization.v1.endpoints.capsule_ctl:73 - ERROR] Get raw data of data capsule failed: object str can't be used in 'await' expression
+[2025-09-30 14:59:26 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`tenant`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_node`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`kb_graph_edge`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`acl_control`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`audit_log`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_claims`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsules`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`capsule_additional_props`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`privilege_type`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1899 - INFO] DESCRIBE `data_bank`.`secret_key`
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1904 - INFO] [raw sql] {}
+[2025-09-30 15:00:26 - sqlalchemy.engine.Engine:1142 - INFO] COMMIT
+[2025-09-30 15:00:29 - sqlalchemy.engine.Engine:1099 - INFO] BEGIN (implicit)
+[2025-09-30 15:00:29 - sqlalchemy.engine.Engine:1899 - INFO] SELECT acl_control.acl_key AS acl_control_acl_key, acl_control.acl_secret AS acl_control_acl_secret, acl_control.expire_time AS acl_control_expire_time, acl_control.create_time AS acl_control_create_time, acl_control.tenant_uuid AS acl_control_tenant_uuid, acl_control.id AS acl_control_id 
+FROM acl_control 
+WHERE acl_control.acl_key = %(acl_key_1)s AND acl_control.acl_secret = %(acl_secret_1)s AND acl_control.tenant_uuid = %(tenant_uuid_1)s 
+ LIMIT %(param_1)s
+[2025-09-30 15:00:29 - sqlalchemy.engine.Engine:1904 - INFO] [generated in 0.00031s] {'acl_key_1': 'all', 'acl_secret_1': '1fa69fcc7b9f4304bea0f6eb177ae66e', 'tenant_uuid_1': '43215949-ef94-4bd9-8bb7-03c6e58bfee5', 'param_1': 1}
+[2025-09-30 15:00:29 - sqlalchemy.engine.Engine:1125 - INFO] ROLLBACK

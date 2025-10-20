@@ -1,9 +1,9 @@
+import logging
 import os
 
 from Crypto.Hash import SHA512
 from Crypto.PublicKey import RSA
 from Crypto.Signature import pss
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class DigitalSignature:
         Args:
             message: str, 代签名的原始消息
             pri_key: RSA.RsaKey， 签名用私钥
-
+        签名思路：使用基于PKI的公钥签名算法，即PKI with RSA PSS
         Returns:
             返回签名结果
         """
@@ -33,6 +33,8 @@ class DigitalSignature:
         alg_hash = SHA512.new()
         alg_hash.update(message.encode('utf-8'))
         logger.debug(f"Hash: {alg_hash.hexdigest()}")
+        # 数字签名要携带时间戳和位置信息
+        # alg_hash.update(f"{message}{time.time()}{os.getpid()}".encode('utf-8'))
         return pss.new(rsa_key).sign(alg_hash)
 
     @staticmethod

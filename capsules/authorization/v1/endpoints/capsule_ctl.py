@@ -1,11 +1,10 @@
 import datetime
+import json
 import logging
 import os.path
 from http import HTTPStatus
 
 from fastapi import APIRouter, UploadFile, Form
-from typing import Optional
-import json
 
 from capsules.authorization.models.collector import CollectorPropModel
 from capsules.authorization.services.capsule_srv import capsule_srv

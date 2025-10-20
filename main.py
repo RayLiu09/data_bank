@@ -4,12 +4,13 @@ import time
 import uvicorn
 from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
+from uvicorn.config import LOGGING_CONFIG
 
 from common.bus_exception import BusException
 from common.db_base import DBBase
 from config.app_holder import set_app
 from config.database import engine
-from config.logs import logger, setup_logging
+from config.logs import setup_logging
 from kb.v1.api import kb_api_router
 from llm.text.v1.api import text_api_router
 from security.v1.api import access_token_router
@@ -20,6 +21,7 @@ from capsules.authorization.v1.api import capsule_api_router
 import capsules.core.schema
 import capsules.authorization.schema
 import pki.kms
+import capsules.health.schema
 
 # 后台任务函数
 # async def run_background_task(content: str):
@@ -30,6 +32,7 @@ import pki.kms
 
 setup_logging()
 
+logger = logging.getLogger("data_bank")
 # 建表
 logger.info("Creating database...")
 # Base.metadata.create_all(bind=engine)
@@ -94,4 +97,4 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=settings.server_host, port=settings.server_port, log_level=logging.DEBUG)
+    uvicorn.run("main:app", host=settings.server_host, port=settings.server_port, log_level=logging.DEBUG, log_config= LOGGING_CONFIG)

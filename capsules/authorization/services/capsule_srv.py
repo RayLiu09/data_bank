@@ -3,7 +3,6 @@ import json
 import logging
 import mimetypes
 import os.path
-import uuid
 from datetime import datetime
 from typing import Dict, Any, List
 
@@ -57,6 +56,7 @@ class CapsuleService:
         - 从KMS服务获取对称加密密钥，采用AES-GCM加密算法对raw_data, summary_data和gene_data进行加密， 同时采用数据银行的私钥对数据内容进行签名得到signature
         - 存储1阶胶囊数据到DBMS， 并存储数据加密密钥到secret_keys
         - 原始医疗影像数据的存储到MinIO对象存储
+        - 生成数据采集者到数据拥有者的授权记录
         - 生成1阶胶囊封装审计日志
         """
         try:
@@ -134,6 +134,7 @@ class CapsuleService:
             # 4. (可选)原始医疗影像数据的存储到MinIO对象存储
             await self._store_medical_images(file, data_capsule.uuid)
             logger.info(f"Data capsule created successfully with UUID: {data_capsule.uuid}")
+            await self._generate_claim(db, data_capsule.uuid, props.owner, props.collector)
             await self._generate_audit_log(db, data_capsule.uuid)
 
             return data_capsule.uuid
@@ -359,5 +360,9 @@ class CapsuleService:
             List[DataCapsuleModel]: 1阶胶囊列表
         """
         return await data_capsule_repo.list_data_capsule(db, offset, limit)
+
+    async def _generate_claim(self, db, uuid, owner, collector):
+        pass
+
 
 capsule_srv = CapsuleService()

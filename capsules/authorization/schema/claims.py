@@ -18,6 +18,7 @@ class CapsuleClaim(DBBase):
     expires_at: Mapped[Optional[DateTime]] = Column(DateTime, nullable=True, comment="权限到期时间")
     deprecated: Mapped[bool] = Column(Boolean, default=False, comment="是否弃用")
     authorizer: Mapped[str] = Column(String(36), comment="授权者")
+    authorizer_signature: Mapped[str] = Column(String(255), comment="授权者签名")
     receiver: Mapped[str] = Column(String(36), comment="接收者")
     capsule_id: Mapped[int] = Column(Integer, ForeignKey("capsules.id"), comment="数据胶囊ID")
     capsule = relationship("DataCapsule", back_populates="claims")

@@ -74,7 +74,7 @@ class APISettings(BaseSettings):
     # 密钥保护密码
     SECRET_PASSPHRASE: str = os.environ.get("SECRET_PASSPHRASE", "")
     # 日志设置
-    log_level: str = "waring"
+    log_level: str = "debug"
     log_dir: str = "./logs"
     # 临时文件目录
     tmp_dir: str = "./upload"

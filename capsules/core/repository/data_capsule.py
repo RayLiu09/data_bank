@@ -2,7 +2,7 @@ from sqlmodel import Session, and_
 
 from capsules.core.models.additional_props import CapsuleAdditionalPropsModel
 from capsules.core.models.capsule import DataCapsuleModel
-from capsules.core.schema import DataCapsule, CapsuleAdditionalProps
+from capsules.core.schema import DataCapsule, CapsuleAdditionalProps, CapsuleOwner
 
 
 class DataCapsuleRepository:
@@ -50,5 +50,35 @@ class DataCapsuleRepository:
             query = query.filter(and_(*conditions))
 
         return query.all()
+
+    async def list_data_capsules_by_owner(self, db: Session, owner_uuid: str, skip: int = 0, limit: int = 1000) -> list[DataCapsule]:
+        """
+        根据 capsule owner uuid 获取 capsule
+        """
+                # 参数验证
+        if skip < 0:
+            skip = 0
+        if limit <= 0 or limit > 1000:  # 限制最大返回数量
+            limit = 100
+
+        try:
+            db_data_capsules = (db.query(DataCapsule)
+                               .join(CapsuleOwner, DataCapsule.uuid == CapsuleOwner.capsule_uuid)
+                               .filter(CapsuleOwner.owner_uuid == owner_uuid)
+                               .offset(skip)
+                               .limit(limit)
+                               .all())
+        except Exception as e:
+            # 记录日志并重新抛出异常
+            raise Exception(f"数据库查询失败: {str(e)}")
+
+        return db_data_capsules
+
+    async def list_capsules_by_uuids(self, db: Session, uuids: list[str]) -> list[DataCapsule]:
+        """
+        根据 capsule uuid 列表获取 capsule
+        """
+        db_data_capsules = db.query(DataCapsule).filter(DataCapsule.uuid.in_(uuids)).all()
+        return db_data_capsules
 
 data_capsule_repo = DataCapsuleRepository()

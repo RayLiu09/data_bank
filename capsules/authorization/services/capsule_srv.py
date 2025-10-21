@@ -9,13 +9,17 @@ from typing import Dict, Any, List
 from sqlmodel import Session
 
 from capsules.audit.repository.audits import audit_repository
+from capsules.authorization.models.claim import CapsuleClaimModel
 from capsules.authorization.models.collector import CollectorPropModel
+from capsules.authorization.repository.capsule_claim import capsule_claim_repo
+from capsules.authorization.services.capsule_privacy import capsule_privacy_srv
 from capsules.core.models.additional_props import CapsuleAdditionalPropsModel
 from capsules.core.models.capsule import DataCapsuleModel
 from capsules.core.repository.additional_props import additional_props_repository
 from capsules.core.repository.data_capsule import data_capsule_repo
 from capsules.utils import minio_client
 from capsules.utils.pdf_processor import PdfProcessor
+from common.bus_exception import BusException
 from common.db_deps import SessionDep
 from llm.medical.capsule_loader import CapsuleLoader
 from pki.kms import SecretKey
@@ -361,6 +365,53 @@ class CapsuleService:
         """
         return await data_capsule_repo.list_data_capsule(db, offset, limit)
 
+    async def list_capsules_by_owner(self, db: SessionDep, owner: str, offset: int = 0, limit: int = 10) -> List[DataCapsuleModel]:
+        """
+        列出指定用户创建的1阶胶囊列表
+
+        Args:
+            db: 数据库会话
+            owner: 胶囊拥有者
+            offset: 偏移量
+            limit: 限制数量
+
+        Returns:
+            List[DataCapsuleModel]: 1阶胶囊列表
+        """
+        return await data_capsule_repo.list_data_capsules_by_owner(db, owner, offset, limit)
+
+    async def grant_capsule(self, db: SessionDep, claim: CapsuleClaimModel, signature: str) -> str:
+        """
+        授权1阶胶囊给其他用户
+
+        Args:
+            db: 数据库会话
+            claim: 授权信息
+
+        Returns:
+            str: 授权结果, 授权包唯一标识UUID
+        """
+        # TODO: 验证授权者数字证书签名
+
+        return await capsule_claim_repo.create_capsule_claim(db, claim,  signature)
+    async def get_capsules_by_claim(self, db, claim_uuid, owner):
+        """
+        根据授权指令获取1阶胶囊数据信息
+        """
+        # 验证授权指令
+        if not claim_uuid:
+            raise BusException(20001, "授权指令不能为空")
+        claim = await capsule_claim_repo.get_capsule_claim(db, claim_uuid)
+        if owner != claim.receiver:
+            raise BusException(20002, "数据访问申请者和授权指令拥有者信息不匹配")
+        # 验证授权指令是否过期
+        if claim.expires_at < datetime.now():
+            raise BusException(20003, "授权指令已过期")
+        # 如果授权指令的隐私级级为公开，则返回数据信息
+        if claim.privacy_level == 0:
+            return await data_capsule_repo.list_capsules_by_uuids(db, claim.capsules)
+        # 非公开授权指令，则调用权益管理模块返回计算后的数据信息
+        return await capsule_privacy_srv.get_capsules_by_claim(claim)
     async def _generate_claim(self, db, uuid, owner, collector):
         pass
 

@@ -18,7 +18,6 @@ class DataCapsule(DBBase):
     raw_ciphertext: Mapped[dict] = Column(Text, comment="原始数据")
     signature: Mapped[str] = Column(String(2048), comment="RSA-2048签名")
     create_time: Mapped[datetime] = Column(DateTime, default=datetime.now, comment="创建时间")
-    claims: Mapped[list[CapsuleClaim]] = relationship("CapsuleClaim", back_populates="capsule")
     aes_key_id: Mapped[int] = Column(Integer, ForeignKey("secret_key.id"), comment="AES-256密钥ID")
     aes_key = relationship("SecretKey", back_populates="capsules")
     additional_props_id: Mapped[int] = Column(Integer, ForeignKey("capsule_additional_props.id"), comment="附加属性ID")

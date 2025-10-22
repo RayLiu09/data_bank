@@ -67,6 +67,7 @@ class APISettings(BaseSettings):
     vol_api_base: str = os.environ.get("VOL_API_BASE", "")
     vol_api_key: str = os.environ.get("VOL_API_KEY", "")
     vol_model_endpoint: str = os.environ.get("VOL_MODEL_ENDPOINT", "")
+    vol_vision_endpoint: str = os.environ.get("VOL_VISION_ENDPOINT", "")
 
     # 默认模型
     sel_model_provider: str = os.environ.get("SEL_MODEL_PROVIDER", "openai")

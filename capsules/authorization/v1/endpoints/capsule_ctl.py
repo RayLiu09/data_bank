@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-@router.post("/collector", dependencies=[TokenDeps], summary="数据采集者将采集数据发送给数据拥有者")
+@router.post("/collect", dependencies=[TokenDeps], summary="数据采集者将采集数据发送给数据拥有者")
 async def collect(db: SessionDep, file: UploadFile, props: str = Form("{}", description="数据胶囊附加属性"), signature: str = Header(..., description="签名")):
     """
     Collect data capsule info, request data type: multipart/form-data, support upload file
@@ -111,7 +111,7 @@ async def list_capsules_by_owner(db: SessionDep, owner: str, offset: int = 0, li
         return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"List data capsules by owner failed: {str(e)}")
 
 @router.post("/grant", dependencies=[TokenDeps], summary="授权数据胶囊给其他用户")
-async def grant_capsules(db: SessionDep, signature: str = Header(..., description="签名"), claim: CapsuleClaimModel = Body(..., description="授权信息")):
+async def grant_capsules(db: SessionDep, claim: CapsuleClaimModel = Body(..., description="授权信息"), signature: str = Header(..., description="签名")):
     """
     Grant data capsule to other users
 
@@ -126,7 +126,7 @@ async def grant_capsules(db: SessionDep, signature: str = Header(..., descriptio
         logger.error(f"Grant data capsule to other users failed: {e}")
         return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"Grant data capsule to other users failed: {str(e)}")
 
-@router.get("/grant/access/{claim_uuid}", dependencies=[TokenDeps], summary="根据授权指令获取数据胶囊")
+@router.get("/access/{claim_uuid}", dependencies=[TokenDeps], summary="根据授权指令获取数据胶囊")
 async def get_capsules_by_claim(db: SessionDep, claim_uuid: str, owner: str = Header(..., description="授权指令拥有者")):
     """
     Get data capsules by claim
@@ -136,7 +136,7 @@ async def get_capsules_by_claim(db: SessionDep, claim_uuid: str, owner: str = He
     """
     try:
         if not owner:
-            return await response_base.fail(code=HTTPStatus.BAD_REQUEST, msg="Invalid owner")
+            return await response_base.fail(code=HTTPStatus.BAD_REQUEST, msg="缺少指令拥有者唯一标识信息")
         response = await capsule_srv.get_capsules_by_claim(db, claim_uuid, owner)
         logger.info(f"Get data capsule by claim successfully: {response}")
         return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=response)

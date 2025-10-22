@@ -69,17 +69,25 @@ class CapsuleService:
             logger.info("Processing medical report")
             if not os.path.exists(file):
                 logger.error(f"File not found: {file}")
-                return None
+                raise BusException(code=10001, message="上传的医疗检测报告文件不存在。")
 
-            markdown_content = PdfProcessor.extract_content_for_markdown(file, False, False)
-            if not markdown_content:
-                raise ValueError("Failed to process PDF file")
+            # 1.2 获取文档的MIME类型,如果是图片类型，则通过调用视觉理解LLM进行处理，并返回处理结果
+            mime_type = mimetypes.guess_type(file)[0]
+            if mime_type and mime_type.startswith("image/"):
+                logger.info("Processing image")
+                source_data = await self._extract_raw_data_from_vision(file)
+            else:
+                logger.info("Processing PDF")
+                source_data = PdfProcessor.extract_content_for_markdown(file, False, False)
+
+            if not source_data:
+                raise BusException(code=10002, message="解析用户医疗检测报告内容失败")
             
             # 1.2 将解析出来的内容交给LLM提取原始数据内容JSON
-            raw_data = await self._extract_raw_data_from_llm(markdown_content)
+            raw_data = await self._extract_raw_data_from_llm(source_data)
             
             # 1.3 采用ZKP算法计算数据概要数据
-            summary_data = await self._generate_summary_data(markdown_content)
+            summary_data = await self._generate_summary_data(source_data)
             
             # 1.4 生成基因数据
             gene_data = await self._generate_gene_data(props)
@@ -145,7 +153,7 @@ class CapsuleService:
             
         except Exception as e:
             logger.error(f"Failed to wrap data capsule: {str(e)}")
-            raise
+            raise BusException(code=10007, message="数据胶囊封装失败")
 
     async def _extract_raw_data_from_llm(self, markdown_content: str) -> Dict[str, Any]:
         """
@@ -166,7 +174,7 @@ class CapsuleService:
             return await capsule_loader.calc_raw_data_by_bnf(markdown_content)
         except Exception as e:
             logger.error(f"Failed to extract raw data: {str(e)}")
-            raise
+            raise BusException(code=10003, message="解析用户医疗检测报告提取BNF内容失败")
 
     async def _generate_summary_data(self, raw_data: str) -> str:
         """
@@ -187,7 +195,7 @@ class CapsuleService:
             return await capsule_loader.calc_summary_data_by_bnf(raw_data)
         except Exception as e:
             logger.error(f"Failed to generate ZKP data: {str(e)}")
-            raise
+            raise BusException(code=10004, message="解析用户医疗检测报告生成数据概要失败")
 
     async def _generate_gene_data(self, props: CollectorPropModel) -> Dict[str, Any]:
         """
@@ -237,7 +245,7 @@ class CapsuleService:
             return encrypted_data
         except Exception as e:
             logger.error(f"Failed to encrypt data: {str(e)}")
-            raise
+            raise BusException(code=10005, message="加密解析后的医疗数据失败")
 
     def _sign_data(self, raw_data: Dict[str, Any], summary_data: str | Dict[str, Any], gene_data: Dict[str, Any]) -> str:
         """
@@ -266,7 +274,7 @@ class CapsuleService:
             return signature
         except Exception as e:
             logger.error(f"Failed to sign data: {str(e)}")
-            raise
+            raise BusException(code=10006, message="数据签名失败")
 
     async def _store_encryption_key(self, db: Session, key: bytes, iv: bytes) -> SecretKey:
         """
@@ -380,7 +388,7 @@ class CapsuleService:
         """
         return await data_capsule_repo.list_data_capsules_by_owner(db, owner, offset, limit)
 
-    async def grant_capsule(self, db: SessionDep, claim: CapsuleClaimModel, signature: str) -> str:
+    async def grant_capsules(self, db: SessionDep, claim: CapsuleClaimModel, signature: str) -> str:
         """
         授权1阶胶囊给其他用户
 
@@ -393,27 +401,53 @@ class CapsuleService:
         """
         # TODO: 验证授权者数字证书签名
 
-        return await capsule_claim_repo.create_capsule_claim(db, claim,  signature)
+        capsule_claim = await capsule_claim_repo.create_capsule_claim(db, claim,  signature)
+        if not capsule_claim:
+            raise BusException(20001, "授权失败")
+        return capsule_claim.uuid
+
     async def get_capsules_by_claim(self, db, claim_uuid, owner):
         """
         根据授权指令获取1阶胶囊数据信息
         """
         # 验证授权指令
+        logger.info(f"Get capsules by claim: {claim_uuid}")
         if not claim_uuid:
-            raise BusException(20001, "授权指令不能为空")
+            logger.error("Claim UUID cannot be empty")
+            raise BusException(20002, "授权指令不能为空")
         claim = await capsule_claim_repo.get_capsule_claim(db, claim_uuid)
         if owner != claim.receiver:
-            raise BusException(20002, "数据访问申请者和授权指令拥有者信息不匹配")
+            logger.error("Data access applicant and authorization instruction owner information do not match")
+            raise BusException(20003, "数据访问申请者和授权指令拥有者信息不匹配")
         # 验证授权指令是否过期
         if claim.expires_at < datetime.now():
-            raise BusException(20003, "授权指令已过期")
+            logger.error("Authorization instruction has expired")
+            raise BusException(20004, "授权指令已过期")
         # 如果授权指令的隐私级级为公开，则返回数据信息
         if claim.privacy_level == 0:
-            return await data_capsule_repo.list_capsules_by_uuids(db, claim.capsules)
+            logger.info("Public authorization instruction")
+            capsules = await data_capsule_repo.list_capsules_by_uuids(db, claim.capsules)
+            if claim.one_time_use:
+                await capsule_claim_repo.deprecate_capsule_claim(db, claim_uuid)
+            return capsules
         # 非公开授权指令，则调用权益管理模块返回计算后的数据信息
         return await capsule_privacy_srv.get_capsules_by_claim(claim)
+
     async def _generate_claim(self, db, uuid, owner, collector):
         pass
+
+    async def _extract_raw_data_from_vision(self, file):
+        """
+        调用视觉理解模型解析图片内容
+        """
+        # 1. 将图片内容读取并转为Base64编码
+        with open(file, "rb") as f:
+            image_base64 = base64.b64encode(f.read()).decode('utf-8')
+
+        # 2. 调用视觉理解模型解析图片内容
+        capsule_loader = CapsuleLoader()
+        return await capsule_loader.extract_text_from_image(image_base64)
+
 
 
 capsule_srv = CapsuleService()

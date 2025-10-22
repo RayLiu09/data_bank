@@ -4,7 +4,7 @@ from typing import Any
 
 from openai import AsyncClient, APIConnectionError, RateLimitError
 
-from llm.model_provider.model_base import ModelBase
+from llm.model_provider.model_base import ModelBase, model_providers
 from llm.prompts.bnf import get_capsule_section
 from settings import settings
 
@@ -94,6 +94,42 @@ class CapsuleLoader:
             )
             logger.debug(f"The result of the query is: /n*******/n{result.choices[0].message.content}/n*******")
             return result.choices[0].message.content
+        except APIConnectionError as e:
+            logger.error(f"The server could not be reached: {e}")
+        except RateLimitError as e:
+            logger.error(f"A 429 status code was received; we should back off a bit. {e}")
+        except Exception as e:
+            logger.error(f"4xx or 5xx status code was received, its status is: {e.status_code}, "
+                         f"and response {e.response}")
+        finally:
+            await self.async_client.close()
+
+    async def extract_text_from_image(self, base64_image: str) -> str | None:
+        """
+        从图片中提取文本内容
+
+        Args:
+            base64_image: str, 图片的base64编码
+        Returns:
+            图片中的文本内容
+        """
+        logger.info(f"Start to extract text from image using {self.model_base.model_settings['vision']}")
+        vision_model = self.model_base.model_settings["vision"]
+        try:
+            completion = await self.async_client.chat.completions.create(
+                model=vision_model,
+                messages=[
+                    {"role": "user", "content": [
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}},
+                        {"type": "text", "text": "Extract the text from the image"}
+                    ]}
+                ],
+                temperature=self.model_base.temperature,
+                top_p=self.model_base.top_p,
+                stream=False
+            )
+            logger.debug(f"The result of the query is: /n*******/n{completion.choices[0].message.content}/n*******")
+            return completion.choices[0].message.content
         except APIConnectionError as e:
             logger.error(f"The server could not be reached: {e}")
         except RateLimitError as e:

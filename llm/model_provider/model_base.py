@@ -5,16 +5,19 @@ model_providers = {
         "api_base": settings.openai_api_base,
         "api_key": settings.openai_api_key,
         "default_model": "gpt-4o-mini",
+        "vision": "sora2"
     },
     "qwen": {
         "api_base": settings.qwen_api_base,
         "api_key": settings.qwen_api_key,
         "default_model": "qwen-plus",
+        "vision": ""
     },
     "vol": {
         "api_base": settings.vol_api_base,
         "api_key": settings.vol_api_key,
         "default_model": settings.vol_model_endpoint,
+        "vision": settings.vol_vision_endpoint,
     },
 }
 

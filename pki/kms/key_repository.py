@@ -44,7 +44,7 @@ class KeyRepository:
         :param db
         :return:
         """
-        self.logger.info(f"get_first_undeprecated_key")
+        self.logger.info(f"Get the first undeprecated AES key.")
         return db.query(SecretKey).filter(SecretKey.deprecated == False).first()
 
 key_repository = KeyRepository()

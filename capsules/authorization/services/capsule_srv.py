@@ -22,7 +22,7 @@ from capsules.utils.pdf_processor import PdfProcessor
 from common.bus_exception import BusException
 from common.db_deps import SessionDep
 from llm.medical.capsule_loader import CapsuleLoader
-from pki.kms import SecretKey
+from pki.kms import SecretKey, DigitalSignature
 from pki.kms.core.aes import AESCipher
 from pki.kms.core.rsa import RSACipher
 from pki.kms.key_model import KeyModel
@@ -44,7 +44,9 @@ class CapsuleService:
 
         处理流程：
         - 预处理：
-            - 通过pdf_processor工具类提取PDF文档完整内容，其输出结构为Markdown格式；
+            - 判断输入文件类型：PDF | JPEG
+            - 如果是PDF,通过pdf_processor工具类提取PDF文档完整内容，其输出结构为Markdown格式；
+            - 如果是JPEG，则通过视觉理解模型提取图片内容；
             - 将上一步解析出来的内容交给LLM，根据定义好的BNF数据规范提取出原始数据内容JSON， 定义为raw_data
             - 计算数据概要数据， 定义为summary_data
             - 生成基因数据， 如{"collector_agent": "xxx三甲医院检测中心",
@@ -57,7 +59,8 @@ class CapsuleService:
                 "executor": "王医生",
                 # 科室名称
                 "department": " Bioinformatics"}，定义为gene_data
-        - 从KMS服务获取对称加密密钥，采用AES-GCM加密算法对raw_data, summary_data和gene_data进行加密， 同时采用数据银行的私钥对数据内容进行签名得到signature
+        - 从KMS服务获取对称加密密钥，采用AES-CBC加密算法对raw_data, summary_data和gene_data进行加密；
+        - 采用数据银行的私钥对数据内容进行签名得到signature；
         - 存储1阶胶囊数据到DBMS， 并存储数据加密密钥到secret_keys
         - 原始医疗影像数据的存储到MinIO对象存储
         - 生成数据采集者到数据拥有者的授权记录
@@ -65,7 +68,7 @@ class CapsuleService:
         """
         try:
             # 1. 预处理阶段
-            # 1.1 通过pdf_processor工具类提取PDF文档完整内容
+            # 1.1 检测输入文件是否存在
             logger.info("Processing medical report")
             if not os.path.exists(file):
                 logger.error(f"File not found: {file}")
@@ -97,16 +100,19 @@ class CapsuleService:
             existed_aes_key = await self._get_aes_key(db)
             if not existed_aes_key:
                 # 2.1 从KMS服务获取对称加密密钥
+                logger.info("Generating AES key")
                 aes_key = AESCipher.generate_key()
                 aes_iv = AESCipher.generate_iv()
             else:
                 # 2.2 从数据库中获取密钥,并将base64编码后的密钥和初始向量进行base64解码转为bytes类型
+                logger.info("Use the exist AES key.")
                 aes_key = base64.b64decode(existed_aes_key.aes_key)
                 aes_iv = base64.b64decode(existed_aes_key.aes_iv)
 
             aes_cipher = AESCipher(aes_key, aes_iv)
             
             # 2.2 采用AES-CBC加密算法对raw_data, zkp_data和gene_data进行加密
+            logger.info("Encrypting data")
             raw_encrypted = self._encrypt_data(raw_data, aes_cipher)
             summary_encrypted = self._encrypt_data(summary_data, aes_cipher)
             gene_encrypted = self._encrypt_data(gene_data, aes_cipher)
@@ -121,7 +127,7 @@ class CapsuleService:
                 age=props.age,
                 area=props.area,
                 producer=props.collector,
-                producer_time=datetime.now(),# 获取当前时间， 后续需要从医疗报告中获取报告产生时间
+                producer_time=props.collector_time,
                 owner=props.owner,
                 sexy=props.sexy,
                 type=props.type,
@@ -130,15 +136,15 @@ class CapsuleService:
             additional_props = await additional_props_repository.create_additional_props(db, additional_props_model)
             
             # 3.2 存储数据加密密钥到secret_keys (这里简化处理，实际应安全存储)
-            if not existed_aes_key:
-                secret_key = await self._store_encryption_key(db, aes_key, aes_iv)
+
+            secret_key = await self._store_encryption_key(db, aes_key, aes_iv) if not existed_aes_key else existed_aes_key
             # 3.3 创建数据胶囊
             data_capsule_model = DataCapsuleModel(
                 summary_ciphertext=summary_encrypted,
                 gene_ciphertext=gene_encrypted,
                 raw_ciphertext=raw_encrypted,
                 signature=signature,
-                aes_key_id=secret_key.id if not existed_aes_key else existed_aes_key.id,
+                aes_key_id=secret_key.id,
                 additional_props_id=additional_props.id
             )
             # 3.4 存储到数据库
@@ -209,9 +215,9 @@ class CapsuleService:
         """
         gene_data = {
             "collector_agent": props.collector if props.collector else "未知检测机构",
-            "collector_time": datetime.now().isoformat(), # TODO: 后续根据报告时间获取
+            "collector_time": props.collector_time if props.collector_time else "未知时间",
             "customer": props.owner if props.owner else "未知客户",
-            "gene_type": props.type if props.type else "基因检测",
+            "gene_type": props.type if props.type else "未知报告类型",
             "open_doctor": "未知医生", # TODO: 后续根据报告获取执行医生
             "executor": "未知执行人", # TODO: 后续根据报告获取执行医生
             "department":  "未知科室", # TODO: 后续根据报告获取执行医生
@@ -236,12 +242,12 @@ class CapsuleService:
         """
         try:
             # 将数据转换为JSON字符串
-            data_str = json.dumps(data, ensure_ascii=False)
+            data_str = json.dumps(data, ensure_ascii=False) if isinstance(data, dict) else data
             data_bytes = data_str.encode('utf-8')
             
             # 使用AES加密
             encrypted_data = aes_cipher.encrypt(data_bytes)
-            
+            logger.info(f"Encrypted data: {encrypted_data}")
             return encrypted_data
         except Exception as e:
             logger.error(f"Failed to encrypt data: {str(e)}")
@@ -266,12 +272,13 @@ class CapsuleService:
                 "summary_data": summary_data,
                 "gene_data": gene_data
             }, sort_keys=True)
-            
+            # TODO: 获取数据银行的数字证书
+            private_key = "数字证书.pem"
             # 使用RSA私钥签名
-            rsa_cipher = RSACipher()
-            signature = rsa_cipher.digital_sign(data_to_sign)
-            
-            return signature
+            digital_signature = DigitalSignature()
+            bytes_sig =  digital_signature.sign(data_to_sign, private_key)
+
+            return base64.b64encode(bytes_sig).decode('utf-8')
         except Exception as e:
             logger.error(f"Failed to sign data: {str(e)}")
             raise BusException(code=10006, message="数据签名失败")
@@ -301,7 +308,7 @@ class CapsuleService:
             return secret_key
         except Exception as e:
             logger.error(f"Failed to store encryption key: {str(e)}")
-            raise
+            raise BusException(code=10009, message="存储数据加密密钥失败")
 
     async def _store_medical_images(self, file_path: str, capsule_uuid: str) -> bool:
         """
@@ -326,7 +333,7 @@ class CapsuleService:
             return True
         except Exception as e:
             logger.error(f"Failed to store medical images: {str(e)}")
-            raise
+            raise BusException(code=10010, message="原始医疗影像数据存储失败")
         finally:
             if os.path.exists(file_path):
                 os.remove(file_path)
@@ -445,8 +452,12 @@ class CapsuleService:
             image_base64 = base64.b64encode(f.read()).decode('utf-8')
 
         # 2. 调用视觉理解模型解析图片内容
-        capsule_loader = CapsuleLoader()
-        return await capsule_loader.extract_text_from_image(image_base64)
+        try:
+            capsule_loader = CapsuleLoader()
+            return await capsule_loader.extract_text_from_image(image_base64)
+        except Exception as e:
+            logger.error(f"Failed to extract text from image: {str(e)}")
+            raise BusException(10008, "图片内容解析失败")
 
 
 

@@ -15,8 +15,7 @@ class CapsuleAdditionalProps(DBBase):
     uuid: Mapped[str] = Column(String(36), unique=True, default=lambda: str(uuid.uuid4()), nullable=False, comment="数据唯一标识")
     type: Mapped[str] = Column(String(5), comment="胶囊数据类型，如10001-CT报告")
     owner: Mapped[str] = Column(String(36), comment="胶囊拥有者")
-    # 采集者标识
-    producer: Mapped[str] = Column(String(36), comment="胶囊采集者")
+    producer: Mapped[str] = Column(String(100), comment="胶囊采集者")
     producer_time: Mapped[datetime] = Column(DateTime, comment="胶囊采集时间")
     level: Mapped[int] = Column(Integer, default=1, comment="胶囊阶数")
     sexy: Mapped[int] = Column(Integer, comment="性别")

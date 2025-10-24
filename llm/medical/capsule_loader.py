@@ -62,11 +62,14 @@ class CapsuleLoader:
             return json_data
         except APIConnectionError as e:
             logger.error(f"The server could not be reached: {e}")
+            raise e
         except RateLimitError as e:
             logger.error(f"A 429 status code was received; we should back off a bit. {e}")
+            raise e
         except Exception as e:
             logger.error(f"4xx or 5xx status code was received, its status is: {e.status_code}, "
                          f"and response {e.response}")
+            raise e
         finally:
             await self.async_client.close()
 
@@ -96,11 +99,14 @@ class CapsuleLoader:
             return result.choices[0].message.content
         except APIConnectionError as e:
             logger.error(f"The server could not be reached: {e}")
+            raise e
         except RateLimitError as e:
             logger.error(f"A 429 status code was received; we should back off a bit. {e}")
+            raise e
         except Exception as e:
             logger.error(f"4xx or 5xx status code was received, its status is: {e.status_code}, "
                          f"and response {e.response}")
+            raise e
         finally:
             await self.async_client.close()
 
@@ -132,10 +138,13 @@ class CapsuleLoader:
             return completion.choices[0].message.content
         except APIConnectionError as e:
             logger.error(f"The server could not be reached: {e}")
+            raise e
         except RateLimitError as e:
             logger.error(f"A 429 status code was received; we should back off a bit. {e}")
+            raise e
         except Exception as e:
             logger.error(f"4xx or 5xx status code was received, its status is: {e.status_code}, "
                          f"and response {e.response}")
+            raise e
         finally:
             await self.async_client.close()

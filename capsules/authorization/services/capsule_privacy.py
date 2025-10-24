@@ -10,6 +10,6 @@ class CapsulePrivacyService:
         """
         Get capsules by claim
         """
-        pass
+        return "Not Implement as the business logic for privacy level 1 ~ 4 has not been clarified."
 
 capsule_privacy_srv = CapsulePrivacyService()

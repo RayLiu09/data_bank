@@ -24,7 +24,6 @@ from common.db_deps import SessionDep
 from llm.medical.capsule_loader import CapsuleLoader
 from pki.kms import SecretKey, DigitalSignature
 from pki.kms.core.aes import AESCipher
-from pki.kms.core.rsa import RSACipher
 from pki.kms.key_model import KeyModel
 from pki.kms.key_repository import key_repository
 
@@ -348,7 +347,7 @@ class CapsuleService:
         """
         生成1阶胶囊封装日志记录
         """
-        audit_log = await audit_repository.save_audit(db, {"capsule_uuid": uuid})
+        audit_log = await audit_repository.save_audit(db, {"capsule_uuid": uuid, "action": "generate_capsule", "status": "success", "description": "数据胶囊数据采集操作"})
         logger.info(f"Audit log generated for capsule: {uuid}")
         return audit_log
 

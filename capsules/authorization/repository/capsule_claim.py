@@ -44,4 +44,28 @@ class CapsuleClaimRepository:
             logger.warning(f"Deprecate capsule claim failed: {capsule_claim_uuid}")
             return False
 
+    async def list_capsule_claims_by_owner(self, db: SessionDep, owner: str,  offset: int = 0, limit: int = 10):
+        """
+        列出1阶胶囊授权指令
+        """
+        logger.info(f"List capsule claims by owner")
+        db_capsule_claims = db.query(CapsuleClaim).filter(CapsuleClaim.authorizer == owner).offset(offset).limit(limit).all()
+        logger.info(f"List capsule claims successfully: {db_capsule_claims}")
+
+    async def list_capsule_claims_by_receiver(self, db: SessionDep, receiver: str,  offset: int = 0, limit: int = 10):
+        """
+        列出1阶胶囊授权指令
+        """
+        logger.info(f"List capsule claims by receiver")
+        db_capsule_claims = db.query(CapsuleClaim).filter(CapsuleClaim.receiver == receiver).offset(offset).limit(limit).all()
+        logger.info(f"List capsule claims successfully: {db_capsule_claims}")
+
+    async def list_capsule_claims(self, db: SessionDep, offset: int = 0, limit: int = 10):
+        """
+        列出1阶胶囊授权指令
+        """
+        logger.info(f"List capsule claims")
+        db_capsule_claims = db.query(CapsuleClaim).offset(offset).limit(limit).all()
+        logger.info(f"List capsule claims successfully: {db_capsule_claims}")
+
 capsule_claim_repo = CapsuleClaimRepository()

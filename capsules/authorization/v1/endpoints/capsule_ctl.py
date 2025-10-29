@@ -9,6 +9,7 @@ from fastapi import APIRouter, UploadFile, Form, Body, Header
 from capsules.authorization.models.claim import CapsuleClaimModel
 from capsules.authorization.models.collector import CollectorPropModel
 from capsules.authorization.services.capsule_srv import capsule_srv
+from common.bus_exception import BusException
 from common.db_deps import SessionDep
 from common.response_util import response_base
 from security.token_deps import TokenDeps
@@ -55,6 +56,9 @@ async def collect(db: SessionDep, file: UploadFile, props: str = Form("{}", desc
         response = await capsule_srv.wrap_data_capsule(db, file_path, collector_props)
         logger.info(f"Collect data capsule info successfully: {response}")
         return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=response)
+    except BusException as e:
+        logger.error(f"Collect data capsule info failed: {e}")
+        return await response_base.fail(code=e.code, msg=f"Collect data capsule info failed: {str(e)}")
     except Exception as e:
         logger.error(f"Collect data capsule info failed: {e}")
         return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"Collect data capsule info failed: {str(e)}")
@@ -122,9 +126,12 @@ async def grant_capsules(db: SessionDep, claim: CapsuleClaimModel = Body(..., de
         response = await capsule_srv.grant_capsules(db, claim, signature)
         logger.info(f"Grant data capsule to other users successfully: {response}")
         return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=response)
+    except BusException as e:
+        logger.error(f"Grant data capsule to other users failed: {e}")
+        return await response_base.fail(code=e.code, msg=f"授权数据胶囊失败，失败原因: {str(e)}")
     except Exception as e:
         logger.error(f"Grant data capsule to other users failed: {e}")
-        return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"Grant data capsule to other users failed: {str(e)}")
+        return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"授权数据胶囊时发生未知错误，具体错误信息为: {str(e)}")
 
 @router.get("/access/{claim_uuid}", dependencies=[TokenDeps], summary="根据授权指令获取数据胶囊")
 async def get_capsules_by_claim(db: SessionDep, claim_uuid: str, owner: str = Header(..., description="授权指令拥有者")):
@@ -140,6 +147,9 @@ async def get_capsules_by_claim(db: SessionDep, claim_uuid: str, owner: str = He
         response = await capsule_srv.get_capsules_by_claim(db, claim_uuid, owner)
         logger.info(f"Get data capsule by claim successfully: {response}")
         return await response_base.success_simple(code=HTTPStatus.OK, msg='Success', data=response)
+    except BusException as e:
+        logger.error(f"Get data capsule by claim failed: {e}")
+        return await response_base.fail(code=e.code, msg=f"根据授权指令获取数据胶囊失败，失败原因: {str(e)}")
     except Exception as e:
         logger.error(f"Get data capsule by claim failed: {e}")
-        return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"Get data capsule by claim failed: {str(e)}")
+        return await response_base.fail(code=HTTPStatus.INTERNAL_SERVER_ERROR, msg=f"根据授权指令获取数据胶囊时发生未知错误，具体错误信息为: {str(e)}")

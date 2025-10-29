@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+import json
 import logging
 
 from capsules.authorization.models.claim import CapsuleClaimModel
@@ -17,6 +18,10 @@ class CapsuleClaimRepository:
         """
         logger.info(f"Create capsule claim: {capsule_claim_in}")
         db_capsule_claim = CapsuleClaim(**capsule_claim_in.model_dump(exclude_unset= True))
+        if capsule_claim_in.scope:
+            logger.info(f"Create capsule claim scope: {capsule_claim_in.scope}")
+            print(f"************{capsule_claim_in.scope}************")
+            db_capsule_claim.scope = json.dumps({"basic_data": capsule_claim_in.scope.basic_data, "zkp_data": capsule_claim_in.scope.zkp_data})
         db_capsule_claim.authorizer_signature = signature
         db.add(db_capsule_claim)
         db.commit()
@@ -51,6 +56,7 @@ class CapsuleClaimRepository:
         logger.info(f"List capsule claims by owner")
         db_capsule_claims = db.query(CapsuleClaim).filter(CapsuleClaim.authorizer == owner).offset(offset).limit(limit).all()
         logger.info(f"List capsule claims successfully: {db_capsule_claims}")
+        return db_capsule_claims
 
     async def list_capsule_claims_by_receiver(self, db: SessionDep, receiver: str,  offset: int = 0, limit: int = 10):
         """
@@ -59,6 +65,7 @@ class CapsuleClaimRepository:
         logger.info(f"List capsule claims by receiver")
         db_capsule_claims = db.query(CapsuleClaim).filter(CapsuleClaim.receiver == receiver).offset(offset).limit(limit).all()
         logger.info(f"List capsule claims successfully: {db_capsule_claims}")
+        return db_capsule_claims
 
     async def list_capsule_claims(self, db: SessionDep, offset: int = 0, limit: int = 10):
         """
@@ -67,5 +74,6 @@ class CapsuleClaimRepository:
         logger.info(f"List capsule claims")
         db_capsule_claims = db.query(CapsuleClaim).offset(offset).limit(limit).all()
         logger.info(f"List capsule claims successfully: {db_capsule_claims}")
+        return db_capsule_claims
 
 capsule_claim_repo = CapsuleClaimRepository()

@@ -16,6 +16,7 @@ from capsules.authorization.services.capsule_privacy import capsule_privacy_srv
 from capsules.core.models.additional_props import CapsuleAdditionalPropsModel
 from capsules.core.models.capsule import DataCapsuleModel
 from capsules.core.repository.additional_props import additional_props_repository
+from capsules.core.repository.capsule_owner import capsule_owner_repo
 from capsules.core.repository.data_capsule import data_capsule_repo
 from capsules.utils import minio_client
 from capsules.utils.pdf_processor import PdfProcessor
@@ -148,6 +149,7 @@ class CapsuleService:
             )
             # 3.4 存储到数据库
             data_capsule = await data_capsule_repo.create_data_capsule(db, data_capsule_model)
+            await self._store_capsule_owner(db, data_capsule.uuid, props.owner)
             # 4. (可选)原始医疗影像数据的存储到MinIO对象存储
             await self._store_medical_images(file, data_capsule.uuid)
             logger.info(f"Data capsule created successfully with UUID: {data_capsule.uuid}")
@@ -214,7 +216,7 @@ class CapsuleService:
         """
         gene_data = {
             "collector_agent": props.collector if props.collector else "未知检测机构",
-            "collector_time": props.collector_time if props.collector_time else "未知时间",
+            "collector_time": props.collector_time.strftime("%Y-%m-%d %H:%M:%S") if props.collector_time else "未知时间",
             "customer": props.owner if props.owner else "未知客户",
             "gene_type": props.type if props.type else "未知报告类型",
             "open_doctor": "未知医生", # TODO: 后续根据报告获取执行医生
@@ -241,6 +243,8 @@ class CapsuleService:
         """
         try:
             # 将数据转换为JSON字符串
+            logger.info(f"Data to encrypt: {data}")
+            print(f"********{data}******************************")
             data_str = json.dumps(data, ensure_ascii=False) if isinstance(data, dict) else data
             data_bytes = data_str.encode('utf-8')
             
@@ -272,7 +276,7 @@ class CapsuleService:
                 "gene_data": gene_data
             }, sort_keys=True)
             # TODO: 获取数据银行的数字证书
-            private_key = "数字证书.pem"
+            private_key = "./certs/private_key.pem"
             # 使用RSA私钥签名
             digital_signature = DigitalSignature()
             bytes_sig =  digital_signature.sign(data_to_sign, private_key)
@@ -410,6 +414,11 @@ class CapsuleService:
         capsule_claim = await capsule_claim_repo.create_capsule_claim(db, claim,  signature)
         if not capsule_claim:
             raise BusException(20001, "授权失败")
+        logger.info(f"Capsule granted: {capsule_claim.uuid}")
+        # 生成胶囊授权操作日志
+        await audit_repository.save_audit(db, {"capsule_uuid": ','.join(capsule_claim.capsules),
+                                               "claim_uuid": capsule_claim.uuid, "action": "grant_capsule",
+                                               "status": "success", "description": "数据胶囊授权操作"})
         return capsule_claim.uuid
 
     async def get_capsules_by_claim(self, db, claim_uuid, owner):
@@ -458,6 +467,8 @@ class CapsuleService:
             logger.error(f"Failed to extract text from image: {str(e)}")
             raise BusException(10008, "图片内容解析失败")
 
+    async def _store_capsule_owner(self, db, uuid, owner):
+        return await capsule_owner_repo.store_capsule_owner(db, {"capsule_uuid": uuid, "owner_uuid": owner})
 
 
 capsule_srv = CapsuleService()

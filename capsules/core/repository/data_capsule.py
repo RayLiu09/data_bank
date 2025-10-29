@@ -78,6 +78,10 @@ class DataCapsuleRepository:
         """
         根据 capsule uuid 列表获取 capsule
         """
+
+        # 将uuids转为数组结构
+        if not isinstance(uuids, list):
+            uuids = [uuids]
         db_data_capsules = db.query(DataCapsule).filter(DataCapsule.uuid.in_(uuids)).all()
         return db_data_capsules
 

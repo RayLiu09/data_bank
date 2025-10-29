@@ -18,6 +18,6 @@ class AuditSrv:
             return audits
         except Exception as e:
             logger.error(f"List data capsule audits failed: {str(e)}")
-            raise BusException(code=500, msg=f"List data capsule audits failed: {str(e)}")
+            raise BusException(code=50001, message=f"获取数据胶囊审计日志失败: {str(e)}")
 
 audit_srv = AuditSrv()

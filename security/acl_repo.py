@@ -29,7 +29,7 @@ class AclControlRepository:
         pass
 
     async def create_acl_control(self, db: Session, acl_control_in: AclControlCreate) -> AclControl:
-        db_acl_control = AclControl(**acl_control_in.model_dump(exclude_unset=True), acl_secret=uuid.uuid4().hex)
+        db_acl_control = AclControl(**acl_control_in.model_dump(exclude_unset=False), acl_secret=uuid.uuid4().hex)
         db.add(db_acl_control)
         db.commit()
         db.refresh(db_acl_control)

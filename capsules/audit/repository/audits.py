@@ -1,9 +1,8 @@
 import logging
 from typing import Any
 
-from sqlalchemy.orm import Session
-
 from capsules.audit.schema import AuditLog
+from common.db_deps import SessionDep
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +13,7 @@ class AuditRepository:
     def __init__(self):
         pass
 
-    async def save_audit(self, db: Session, audit_info: dict) -> AuditLog:
+    async def save_audit(self, db: SessionDep, audit_info: dict) -> AuditLog:
         """
         保存审计信息
 
@@ -28,7 +27,7 @@ class AuditRepository:
         db.refresh(audit_info)
         return audit_info
 
-    async def get_audit(self, db: Session, audit_id: str) -> Any:
+    async def get_audit(self, db: SessionDep, audit_id: str) -> Any:
         """
         获取审计信息
 
@@ -44,7 +43,7 @@ class AuditRepository:
             return {}
         return audit
 
-    async def list_audits(self, db: Session, offset: int = 0, limit: int = 10) -> list:
+    async def list_audits(self, db: SessionDep, offset: int = 0, limit: int = 10) -> list:
         """
         获取审计列表
 
@@ -56,9 +55,10 @@ class AuditRepository:
             list: 审计列表
         """
         audits = db.query(AuditLog).offset(offset).limit(limit).all()
-        if not audits:
+        logger.info(f"Listing {len(audits)} audits")
+        if len(audits) == 0:
             logger.info("No audits found")
             return []
-        return [audit.to_dict for audit in audits]
+        return audits
 
 audit_repository = AuditRepository()

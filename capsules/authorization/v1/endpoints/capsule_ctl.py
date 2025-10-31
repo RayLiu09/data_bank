@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 @router.post("/collect", dependencies=[TokenDeps], summary="数据采集者将采集数据发送给数据拥有者")
-async def collect(db: SessionDep, file: UploadFile, props: str = Form("{}", description="数据胶囊附加属性"), signature: str = Header(..., description="签名")):
+async def collect(db: SessionDep, file: UploadFile, props: str = Form(CollectorPropModel, description="数据胶囊附加属性"), signature: str = Header(..., description="签名")):
     """
     Collect data capsule info, request data type: multipart/form-data, support upload file
 
@@ -37,7 +37,6 @@ async def collect(db: SessionDep, file: UploadFile, props: str = Form("{}", desc
         collector_props = CollectorPropModel(**props_data)
     except Exception as e:
         logger.error(f"Failed to parse props: {e}")
-        collector_props = CollectorPropModel()
     
     # 将上传的数据文件保存到临时目录
     temp_dir = settings.tmp_dir
@@ -46,7 +45,8 @@ async def collect(db: SessionDep, file: UploadFile, props: str = Form("{}", desc
         os.makedirs(temp_dir)
         
     timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
-    file_path = os.path.join(temp_dir, f"{file.filename}_{timestamp}")
+    file_name,  file_ext = os.path.splitext(file.filename)
+    file_path = os.path.join(temp_dir, f"{file_name}_{timestamp}{file_ext}")
     with open(file_path, 'wb') as buffer:
         contents = await file.read()
         buffer.write(contents)

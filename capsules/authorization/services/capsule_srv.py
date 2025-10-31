@@ -468,7 +468,7 @@ class CapsuleService:
             raise BusException(10008, "图片内容解析失败")
 
     async def _store_capsule_owner(self, db, uuid, owner):
-        return await capsule_owner_repo.store_capsule_owner(db, {"capsule_uuid": uuid, "owner_uuid": owner})
+        return await capsule_owner_repo.save_capsule_owner(db, {"capsule_uuid": uuid, "owner_uuid": owner})
 
 
 capsule_srv = CapsuleService()
